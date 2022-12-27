@@ -1,1 +1,1 @@
-const qqq = "런게더"
+const qqq = "런게"
