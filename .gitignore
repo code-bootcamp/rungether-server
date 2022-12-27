@@ -4,3 +4,4 @@ node_modules
 .env.docker
 .env.prod
 .env.stage
+.DS_Store
