@@ -1,1 +1,1 @@
-const qqq = "런게"
+const qqq = "수정된 qqq입니다"
