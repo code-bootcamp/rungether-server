@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  email: String!
+  nickName: String!
+  password: String!
+  region: String!
+  like: Int!
+  gender: String!
+  age: String!
+}
+
+type Query {
+  fetchUsers: [User!]!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  email: String!
+  nickName: String!
+  password: String!
+  rePassword: String!
+  region: String!
+  level: String!
+  gender: String!
+  age: String!
+}
