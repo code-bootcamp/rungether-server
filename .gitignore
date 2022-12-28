@@ -1,8 +1,5 @@
 node_modules
 dist
-.env
-.env.dev
-.env.docker
-.env.prod
-.env.stage
+.env*
+gcp-file-storage.json
 .DS_Store
