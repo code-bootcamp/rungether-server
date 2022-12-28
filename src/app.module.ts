@@ -4,9 +4,12 @@ import { UsersModule } from "./apis/Users/users.module";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { BoardModule } from "./apis/Boards/board.module";
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
+    BoardModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -25,7 +28,7 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
       logging: true,
     }),
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
