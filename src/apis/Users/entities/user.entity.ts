@@ -1,6 +1,13 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { Prefer } from "src/apis/Prefers/entities/prefer.entity";
-import { Column, Entity, JoinTable, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinTable,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
 @ObjectType()
@@ -9,16 +16,15 @@ export class User {
   @Field()
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field()
   email: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field()
-  nickName: string;
+  nickname: string;
 
   @Column()
-  @Field()
   password: string;
 
   @Column()
@@ -36,4 +42,13 @@ export class User {
   @Column()
   @Field()
   age: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

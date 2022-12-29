@@ -5,8 +5,7 @@
 type User {
   id: String!
   email: String!
-  nickName: String!
-  password: String!
+  nickname: String!
   region: String!
   like: Int!
   gender: String!
@@ -18,16 +17,7 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-}
-
-input CreateUserInput {
-  email: String!
-  nickName: String!
-  password: String!
-  rePassword: String!
-  region: String!
-  level: String!
-  gender: String!
-  age: String!
+  sendTokenToEmail(email: String!): String!
+  checkTokenEmail(email: String!, token: String!): String!
+  checkNickName(nickname: String!): String!
 }
