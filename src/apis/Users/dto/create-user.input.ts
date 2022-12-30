@@ -1,5 +1,4 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { Prefer } from "src/apis/Prefers/entities/prefer.entity";
 
 @InputType()
 export class CreateUserInput {
@@ -11,9 +10,6 @@ export class CreateUserInput {
 
   @Field()
   password: string;
-
-  @Field()
-  rePassword: string;
 
   @Field()
   region: string;
