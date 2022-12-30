@@ -12,11 +12,20 @@ export class CreateUserInput {
   password: string;
 
   @Field()
-  region: string;
-
-  @Field()
-  level: string;
+  age: string;
 
   @Field()
   gender: string;
+
+  @Field({ nullable: true })
+  profileUrl: string;
+
+  @Field()
+  regionId: string;
+
+  @Field()
+  preferId: string;
+
+  @Field()
+  gradeId: string;
 }
