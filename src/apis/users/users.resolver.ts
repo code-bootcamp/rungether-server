@@ -1,6 +1,5 @@
-import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Args, Mutation, Query } from "@nestjs/graphql";
-import { Cache } from "cache-manager";
 import { CreateUserInput } from "./dto/create-user.input";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
@@ -8,42 +7,24 @@ import { UsersService } from "./users.service";
 @Injectable()
 export class UsersResolver {
   constructor(
-    private readonly usersService: UsersService, //
-
-    @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache
+    private readonly usersService: UsersService //
   ) {}
 
-  // @Mutation(() => String)
-  // checkEmail(
-  //   @Args("email") email: string //
-  // ) {
-  //   const findEmail = this.usersService.findOne({ email });
-  //   if (findEmail) {
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
-  @Mutation(() => String)
-  checkNickName(
+  @Query(() => String)
+  async checkNickName(
     @Args("nickname") nickname: string //
   ) {
-    const findNickName = this.usersService.findOne({ nickname });
+    const findNickName = await this.usersService.findNickname({ nickname });
     if (findNickName) {
       return false;
-    }
-    return true;
+    } else return true;
   }
 
   @Mutation(() => User)
-  async createUser(
+  createUser(
     @Args("createUserInput") createUserInput: CreateUserInput //
   ) {
-    const isValid = await this.cacheManager.get(createUserInput.email);
-    if (!isValid) throw new Error("인증이 완료되지 않았습니다.");
-
-    const user = await this.usersService.create({ createUserInput });
+    return this.usersService.createUser({ createUserInput });
   }
 
   @Query(() => [User])

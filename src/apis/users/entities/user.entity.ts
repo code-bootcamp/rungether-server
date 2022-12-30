@@ -33,19 +33,15 @@ export class User {
 
   @Column()
   @Field()
-  grade: string;
-
-  @Column()
-  @Field()
   gender: string;
 
   @Column()
   @Field()
-  region: string;
+  imageUrl: string;
 
   @Column({ default: 0 })
   @Field(() => Int)
-  like: number;
+  friendship: number;
 
   @CreateDateColumn()
   createdAt: Date;
