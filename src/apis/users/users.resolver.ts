@@ -1,12 +1,18 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
 import { Args, Mutation, Query } from "@nestjs/graphql";
+import { Cache } from "cache-manager";
 import { CreateUserInput } from "./dto/create-user.input";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
 
 @Injectable()
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService, //
+
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
+  ) {}
 
   // @Mutation(() => String)
   // checkEmail(
@@ -30,12 +36,15 @@ export class UsersResolver {
     return true;
   }
 
-  // @Mutation(() => User)
-  // createUser(
-  //   @Args("createUserInput") createUserInput: CreateUserInput //
-  // ) {
-  //   const {} = createUserInput
-  // }
+  @Mutation(() => User)
+  async createUser(
+    @Args("createUserInput") createUserInput: CreateUserInput //
+  ) {
+    const isValid = await this.cacheManager.get(createUserInput.email);
+    if (!isValid) throw new Error("인증이 완료되지 않았습니다.");
+
+    const user = await this.usersService.create({ createUserInput });
+  }
 
   @Query(() => [User])
   fetchUsers(): Promise<User[]> {
