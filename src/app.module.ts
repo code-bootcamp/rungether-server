@@ -1,12 +1,12 @@
 import { CacheModule, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UsersModule } from "./apis/Users/users.module";
+import { UsersModule } from "./apis/users/users.module";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { BoardModule } from "./apis/Boards/board.module";
+import { BoardModule } from "./apis/boards/board.module";
 import { AppController } from "./app.controller";
-import { EmailModule } from "./apis/Mails/mails.module";
+import { EmailModule } from "./apis/mails/mails.module";
 import { RedisClientOptions } from "redis";
 import * as redisStore from "cache-manager-redis-store";
 
@@ -33,7 +33,7 @@ import * as redisStore from "cache-manager-redis-store";
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
-      url: "redis://redis:6379",
+      url: "redis://my-redis:6379",
       isGlobal: true,
     }),
   ],

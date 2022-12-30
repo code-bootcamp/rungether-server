@@ -34,7 +34,7 @@ export class UsersResolver {
   // createUser(
   //   @Args("createUserInput") createUserInput: CreateUserInput //
   // ) {
-
+  //   const {} = createUserInput
   // }
 
   @Query(() => [User])
