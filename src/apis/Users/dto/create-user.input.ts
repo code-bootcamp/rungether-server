@@ -19,7 +19,4 @@ export class CreateUserInput {
 
   @Field()
   gender: string;
-
-  @Field()
-  age: string;
 }

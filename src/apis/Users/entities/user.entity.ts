@@ -29,11 +29,11 @@ export class User {
 
   @Column()
   @Field()
-  region: string;
+  age: string;
 
-  @Column({ default: 0 })
-  @Field(() => Int)
-  like: number;
+  @Column()
+  @Field()
+  grade: string;
 
   @Column()
   @Field()
@@ -41,7 +41,11 @@ export class User {
 
   @Column()
   @Field()
-  age: string;
+  region: string;
+
+  @Column({ default: 0 })
+  @Field(() => Int)
+  like: number;
 
   @CreateDateColumn()
   createdAt: Date;

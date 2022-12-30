@@ -1,7 +1,7 @@
 import { CACHE_MANAGER, Inject, NotFoundException } from "@nestjs/common";
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 import { Cache } from "cache-manager";
-import { UsersService } from "../Users/users.service";
+import { UsersService } from "../users/users.service";
 import { MailsService } from "./mails.service";
 
 @Resolver()
