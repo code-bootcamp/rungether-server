@@ -1,8 +1,18 @@
+import { Request, Response } from "express";
+
+export interface IAuthUserItem {
+  email: string;
+  exp: number;
+}
+
+export interface IUserItem {
+  email: string;
+}
+
 export interface IUser {
   user?: {
     email: string;
     password: string;
-    id: string;
     boardId: string;
   };
 }

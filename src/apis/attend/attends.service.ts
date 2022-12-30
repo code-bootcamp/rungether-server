@@ -18,51 +18,51 @@ export class AttendsService {
     private readonly attendsRepository: Repository<Attend>
   ) {}
 
-  async attend({ boardId, user }) {
-    const findUser = await this.usersRepository.findOne({
-      where: { email: user },
-    });
+  // async attend({ boardId, user }) {
+  //   const findUser = await this.usersRepository.findOne({
+  //     where: { email: user },
+  //   });
 
-    const findAttend = await this.attendsRepository.findOne({
-      where: {
-        board: { id: boardId },
-        user: { id: findUser.id },
-      },
-      relations: ["board", "user"],
-    });
+  //   const findAttend = await this.attendsRepository.findOne({
+  //     where: {
+  //       board: { id: boardId },
+  //       user: { id: findUser.id },
+  //     },
+  //     relations: ["board", "user"],
+  //   });
 
-    if (findAttend) {
-      await this.attendsRepository.delete({
-        board: { id: boardId },
-        user: { id: findUser.id },
-      });
+  //   if (findAttend) {
+  //     await this.attendsRepository.delete({
+  //       board: { id: boardId },
+  //       user: { id: findUser.id },
+  //     });
 
-      const findBoard = await this.boardsRepository.findOne({
-        where: { id: boardId },
-      });
+  //     const findBoard = await this.boardsRepository.findOne({
+  //       where: { id: boardId },
+  //     });
 
-      await this.boardsRepository.update(
-        { id: boardId },
-        { attend: findBoard.attend - 1 }
-      );
+  //     await this.boardsRepository.update(
+  //       { id: boardId },
+  //       { attend: findBoard.attend - 1 }
+  //     );
 
-      return "참가 취소";
-    } else {
-      await this.attendsRepository.save({
-        board: { id: boardId },
-        user: { id: findUser.id },
-      });
+  //     return "참가 취소";
+  //   } else {
+  //     await this.attendsRepository.save({
+  //       board: { id: boardId },
+  //       user: { id: findUser.id },
+  //     });
 
-      const findBoard = await this.boardsRepository.findOne({
-        where: { id: boardId },
-      });
+  //     const findBoard = await this.boardsRepository.findOne({
+  //       where: { id: boardId },
+  //     });
 
-      await this.boardsRepository.update(
-        { id: boardId },
-        { attend: findBoard.attend + 1 }
-      );
+  //     await this.boardsRepository.update(
+  //       { id: boardId },
+  //       { attend: findBoard.attend + 1 }
+  //     );
 
-      return "참가 등록";
-    }
-  }
+  //     return "참가 등록";
+  //   }
+  // }
 }

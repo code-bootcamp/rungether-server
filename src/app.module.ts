@@ -15,10 +15,16 @@ import { FilesModule } from "./apis/files/files.module";
 import { CommentsModule } from "./apis/comments/comments.module";
 import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
 import { PicksModule } from "./apis/picks/picks.module";
+import { AuthModule } from "./apis/auth/auth.module";
+import { CommentsModule } from "./apis/comments/comments.module";
+import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
+import { JwtAccessStrategy } from "./commons/auth/jwt-access.strategy";
+import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
 
 @Module({
   imports: [
     AttendsModule,
+    AuthModule,
     BoardModule,
     CommentsModule,
     NestedCommentsModule,
@@ -64,6 +70,6 @@ import { PicksModule } from "./apis/picks/picks.module";
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtAccessStrategy, JwtRefreshStrategy],
 })
 export class AppModule {}

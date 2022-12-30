@@ -14,6 +14,6 @@ export class AttendsResolver {
     @Context() context: IContext
   ) {
     const user = context.req.user.email;
-    return this.attendsService.attend({ boardId, user });
+    // return this.attendsService.attend({ boardId, user });
   }
 }

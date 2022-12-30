@@ -6,17 +6,26 @@ export class CreateUserInput {
   email: string;
 
   @Field()
-  nickName: string;
+  nickname: string;
 
   @Field()
   password: string;
 
   @Field()
-  region: string;
-
-  @Field()
-  level: string;
+  age: string;
 
   @Field()
   gender: string;
+
+  @Field({ nullable: true })
+  imageUrl: string;
+
+  @Field()
+  regionId: string;
+
+  @Field()
+  preferId: string;
+
+  @Field()
+  gradeId: string;
 }

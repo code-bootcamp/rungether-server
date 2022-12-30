@@ -4,7 +4,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -33,19 +32,27 @@ export class User {
 
   @Column()
   @Field()
-  grade: string;
-
-  @Column()
-  @Field()
   gender: string;
+
+  @Column({ nullable: true })
+  @Field()
+  profileUrl: string;
 
   @Column()
   @Field()
   region: string;
 
+  @Column()
+  @Field()
+  prefer: string;
+
+  @Column()
+  @Field()
+  grade: string;
+
   @Column({ default: 0 })
   @Field(() => Int)
-  like: number;
+  friendshipCount: number;
 
   @CreateDateColumn()
   createdAt: Date;

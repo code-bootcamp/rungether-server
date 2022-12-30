@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { CommentsService } from "./comments.service";
 import { CreateCommentInput } from "./dto/createComment.input";
 import { UpdateCommentInput } from "./dto/updateComment.input";
-import { Comment } from "./entity/comments.entity";
+import { Comment } from "./entity/comment.entity";
 
 @Resolver()
 export class CommentsResolver {

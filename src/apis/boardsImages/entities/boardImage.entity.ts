@@ -17,7 +17,7 @@ export class BoardImage {
 
   @Column()
   @Field(() => String, { nullable: true })
-  image_url: string;
+  img_url: string;
 
   @Column()
   @Field(() => Boolean)
