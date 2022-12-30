@@ -3,10 +3,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Board } from "src/apis/boards/entities/board.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import { Repository } from "typeorm";
-import { Like } from "./entities/like.entity";
+import { Pick } from "./entities/pick.entity";
 
 @Injectable()
-export class LikesService {
+export class PicksService {
   constructor(
     @InjectRepository(Board)
     private readonly boardsRepository: Repository<Board>,
@@ -14,16 +14,16 @@ export class LikesService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
 
-    @InjectRepository(Like)
-    private readonly likesRepository: Repository<Like>
+    @InjectRepository(Pick)
+    private readonly picksRepository: Repository<Pick>
   ) {}
 
-  async like({ boardId, user }) {
+  async pick({ boardId, user }) {
     const findUser = await this.usersRepository.findOne({
       where: { email: user },
     });
 
-    const findLike = await this.likesRepository.findOne({
+    const findPick = await this.picksRepository.findOne({
       where: {
         board: { id: boardId },
         user: { id: findUser.id },
@@ -31,8 +31,8 @@ export class LikesService {
       relations: ["board", "user"],
     });
 
-    if (findLike) {
-      await this.likesRepository.delete({
+    if (findPick) {
+      await this.picksRepository.delete({
         board: { id: boardId },
         user: { id: findUser.id },
       });
@@ -43,12 +43,12 @@ export class LikesService {
 
       await this.boardsRepository.update(
         { id: boardId },
-        { like: board.like - 1 }
+        { pick: board.pick - 1 }
       );
 
-      return "좋아요 취소";
+      return "찜 취소";
     } else {
-      await this.likesRepository.save({
+      await this.picksRepository.save({
         board: { id: boardId },
         user: { id: findUser.id },
       });
@@ -59,10 +59,10 @@ export class LikesService {
 
       await this.boardsRepository.update(
         { id: boardId },
-        { like: boards.like + 1 }
+        { pick: boards.pick + 1 }
       );
 
-      return "좋아요 추가";
+      return "찜 추가";
     }
   }
 }

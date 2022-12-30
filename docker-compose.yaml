@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./src:/myfolder/src
+      - ./src:/rungether/src
     ports:
       - 3000:3000
     env_file:

@@ -13,10 +13,11 @@ import { AppService } from "./app.service";
 import { AttendsModule } from "./apis/attend/attends.module";
 import { FilesModule } from "./apis/files/files.module";
 import { RegionsModule } from "./apis/region/regions.module";
-import { LikesModule } from "./apis/likes/likes.module";
 import { PrefersModule } from "./apis/prefers/prefers.module";
 import { CommentsModule } from "./apis/comments/comments.module";
 import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
+import { GradesModule } from "./apis/grade/grades.module";
+import { PicksModule } from "./apis/picks/picks.module";
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.modul
     NestedCommentsModule,
     EmailModule,
     FilesModule,
-    LikesModule,
+    GradesModule,
+    PicksModule,
     PrefersModule,
     RegionsModule,
     UsersModule,
