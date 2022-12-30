@@ -1,23 +1,23 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Board } from "src/apis/boards/entities/board.entity";
+import { ReviewBoard } from "src/apis/reviewBoards/entities/reviewBoard.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 @ObjectType()
-export class BoardImage {
+export class ReviewBoardImage {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
   @Column()
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   img_url: string;
 
   @Column()
   @Field(() => Boolean)
   isMain: boolean;
 
-  @ManyToOne(() => Board)
-  @Field(() => Board)
-  board: Board;
+  @ManyToOne(() => ReviewBoard)
+  @Field(() => ReviewBoard)
+  reviewBoard: ReviewBoard;
 }

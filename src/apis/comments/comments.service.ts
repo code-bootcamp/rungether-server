@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Comment } from "./entity/comments.entity";
+import { Comment } from "./entity/comment.entity";
 import {
   ICommentServiceDelete,
   ICommentServiceFindOne,
