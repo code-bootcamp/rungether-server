@@ -4,12 +4,15 @@ import { UsersModule } from "./apis/Users/users.module";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { BoardModule } from "./apis/Boards/board.module";
+import { AppController } from "./app.controller";
 import { EmailModule } from "./apis/Mails/mails.module";
 import { RedisClientOptions } from "redis";
 import * as redisStore from "cache-manager-redis-store";
 
 @Module({
   imports: [
+    BoardModule,
     EmailModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -34,7 +37,7 @@ import * as redisStore from "cache-manager-redis-store";
       isGlobal: true,
     }),
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
