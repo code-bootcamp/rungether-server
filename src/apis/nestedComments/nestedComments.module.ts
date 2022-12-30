@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Comment } from "../comments/entity/comments.entity";
-import { User } from "../Users/entities/user.entity";
+import { User } from "../users/entities/user.entity";
 import { NestedComment } from "./entity/nestedComments.entity";
 import { NestedCommentsResolver } from "./nestedComments.resolver";
 import { NestedCommentsService } from "./nestedComments.service";
