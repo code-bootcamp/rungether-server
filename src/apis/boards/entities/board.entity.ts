@@ -32,7 +32,7 @@ export class Board {
 
   @Column({ default: 0 })
   @Field(() => Int)
-  like: number;
+  pick: number;
 
   @Column()
   @Field(() => String)

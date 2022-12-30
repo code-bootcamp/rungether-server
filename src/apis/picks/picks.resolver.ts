@@ -1,19 +1,19 @@
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { IContext } from "src/commons/type/context";
-import { LikesService } from "./likes.service";
+import { PicksService } from "./picks.service";
 
 @Resolver()
-export class LikesResolver {
+export class PicksResolver {
   constructor(
-    private readonly likesService: LikesService //
+    private readonly picksService: PicksService //
   ) {}
 
   @Mutation(() => String)
-  likeBoard(
+  pickBoard(
     @Args("boardId") boardId: string, //
     @Context() context: IContext
   ) {
     const user = context.req.user.email;
-    return this.likesService.like({ boardId, user });
+    return this.picksService.pick({ boardId, user });
   }
 }

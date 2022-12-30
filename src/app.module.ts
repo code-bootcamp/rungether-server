@@ -12,12 +12,6 @@ import * as redisStore from "cache-manager-redis-store";
 import { AppService } from "./app.service";
 import { AttendsModule } from "./apis/attend/attends.module";
 import { FilesModule } from "./apis/files/files.module";
-import { LikesModule } from "./apis/likes/likes.module";
-import { CommentsModule } from "./apis/comments/comments.module";
-import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
-import { AuthModule } from "./apis/auth/auth.module";
-import { JwtAccessStrategy } from "./commons/auth/jwt-access.strategy";
-import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
 
 @Module({
   imports: [
@@ -28,7 +22,6 @@ import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
     NestedCommentsModule,
     EmailModule,
     FilesModule,
-    LikesModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
