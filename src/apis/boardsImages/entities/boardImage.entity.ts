@@ -10,7 +10,7 @@ export class BoardImage {
   id: string;
 
   @Column()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   image_url: string;
 
   @Column()

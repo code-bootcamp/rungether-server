@@ -5,7 +5,7 @@ import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 @ObjectType()
-export class Like {
+export class Pick {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;

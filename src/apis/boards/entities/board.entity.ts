@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Grade } from "src/apis/grade/entities/grade.entity";
 import { Prefer } from "src/apis/prefers/entities/prefer.entity";
 import { Region } from "src/apis/region/entities/region.entity";
 import { User } from "src/apis/users/entities/user.entity";
@@ -34,7 +35,7 @@ export class Board {
 
   @Column({ default: 0 })
   @Field(() => Int)
-  like: number;
+  pick: number;
 
   @Column()
   @Field(() => String)
@@ -66,4 +67,9 @@ export class Board {
   @ManyToOne(() => Prefer)
   @Field(() => Prefer)
   prefer: Prefer;
+
+  @JoinTable()
+  @ManyToOne(() => Grade)
+  @Field(() => Grade)
+  grade: Grade;
 }

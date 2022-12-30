@@ -6,18 +6,128 @@ type User {
   id: String!
   email: String!
   nickname: String!
+  age: String!
+  grade: String!
+  gender: String!
   region: String!
   like: Int!
-  gender: String!
-  age: String!
+}
+
+type Grade {
+  id: String!
+  grade: String!
+}
+
+type Prefer {
+  id: String!
+  prefer: String!
+}
+
+type Region {
+  id: String!
+  region: String!
+}
+
+type Board {
+  id: String!
+  title: String!
+  content: String!
+  attend: Int!
+  pick: Int!
+  appointment: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  user: User!
+  region: Region!
+  prefer: Prefer!
+  grade: Grade!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Comment {
+  id: String!
+  content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  user: User!
+}
+
+type NestedComment {
+  id: String!
+  content: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deletedAt: DateTime!
+  user: User!
+  comment: Comment!
 }
 
 type Query {
+  getHello: String!
+  fetchComment(id: String!): Comment!
+  fetchNestedComment(id: String!): NestedComment!
+  fetchGrades: [Grade!]!
+  fetchPrefers: [Prefer!]!
+  fetchRegions: [Region!]!
   fetchUsers: [User!]!
 }
 
 type Mutation {
+  attendBoard(boardId: String!): String!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  deleteComment(id: String!): Boolean!
+  updateComment(id: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
+  createNestedComment(createNestedCommentInput: CreateNestedCommentInput!): NestedComment!
+  deleteNestedComment(id: String!): Boolean!
+  updateNestedComment(id: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
   sendTokenToEmail(email: String!): String!
   checkTokenEmail(email: String!, token: String!): String!
+  uploadFile(file: Upload!): String!
+  uploadFiles(files: [Upload!]!): [String!]!
+  createGrade(grade: String!): Grade!
+  pickBoard(boardId: String!): String!
+  createPrefer(prefer: String!): Prefer!
+  createRegion(region: String!): Region!
   checkNickName(nickname: String!): String!
+  createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateCommentInput {
+  userId: String!
+  content: String!
+}
+
+input UpdateCommentInput {
+  userId: String
+  content: String
+}
+
+input CreateNestedCommentInput {
+  content: String!
+  commentId: String!
+  userId: String!
+}
+
+input UpdateNestedCommentInput {
+  content: String
+  commentId: String
+  userId: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateUserInput {
+  email: String!
+  nickName: String!
+  password: String!
+  region: String!
+  level: String!
+  gender: String!
 }
