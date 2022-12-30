@@ -4,7 +4,7 @@ import { UsersModule } from "./apis/users/users.module";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { BoardModule } from "./apis/boards/board.module";
+import { BoardModule } from "./apis/boards/boards.module";
 import { AppController } from "./app.controller";
 import { EmailModule } from "./apis/mails/mails.module";
 import { RedisClientOptions } from "redis";
@@ -12,6 +12,9 @@ import * as redisStore from "cache-manager-redis-store";
 import { AppService } from "./app.service";
 import { AttendsModule } from "./apis/attend/attends.module";
 import { FilesModule } from "./apis/files/files.module";
+import { CommentsModule } from "./apis/comments/comments.module";
+import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
+import { PicksModule } from "./apis/picks/picks.module";
 import { AuthModule } from "./apis/auth/auth.module";
 import { CommentsModule } from "./apis/comments/comments.module";
 import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
@@ -27,6 +30,7 @@ import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
     NestedCommentsModule,
     EmailModule,
     FilesModule,
+    PicksModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
