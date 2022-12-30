@@ -6,7 +6,7 @@ export class CreateUserInput {
   email: string;
 
   @Field()
-  nickName: string;
+  nickname: string;
 
   @Field()
   password: string;
@@ -18,7 +18,7 @@ export class CreateUserInput {
   gender: string;
 
   @Field({ nullable: true })
-  profileUrl: string;
+  imageUrl: string;
 
   @Field()
   regionId: string;

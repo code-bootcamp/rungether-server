@@ -12,23 +12,23 @@ import * as redisStore from "cache-manager-redis-store";
 import { AppService } from "./app.service";
 import { AttendsModule } from "./apis/attend/attends.module";
 import { FilesModule } from "./apis/files/files.module";
-import { RegionsModule } from "./apis/region/regions.module";
 import { LikesModule } from "./apis/likes/likes.module";
-import { PrefersModule } from "./apis/prefers/prefers.module";
 import { CommentsModule } from "./apis/comments/comments.module";
 import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
+import { AuthModule } from "./apis/auth/auth.module";
+import { JwtAccessStrategy } from "./commons/auth/jwt-access.strategy";
+import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
 
 @Module({
   imports: [
     AttendsModule,
+    AuthModule,
     BoardModule,
     CommentsModule,
     NestedCommentsModule,
     EmailModule,
     FilesModule,
     LikesModule,
-    PrefersModule,
-    RegionsModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -57,7 +57,7 @@ import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.modul
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
       entities: [__dirname + "/apis/**/*.entity.*"],
-      synchronize: true,
+      synchronize: false,
       logging: true,
     }),
     CacheModule.register<RedisClientOptions>({
@@ -68,6 +68,6 @@ import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.modul
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtAccessStrategy, JwtRefreshStrategy],
 })
 export class AppModule {}

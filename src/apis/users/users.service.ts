@@ -35,16 +35,16 @@ export class UsersService {
   }
 
   async createUser({ createUserInput }) {
-    const { email, password, ...user } = createUserInput;
+    const { email, password, nickname, ...user } = createUserInput;
 
-    const isValid = await this.cacheManager.get(email);
+    const isValid = await this.cacheManager.get(createUserInput.email);
 
     if (!isValid) throw new BadRequestException("인증이 완료되지 않았습니다.");
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
 
     const result = this.usersRepository.save({
-      ...user,
+      ...createUserInput,
       password: hashedPassword,
     });
 
