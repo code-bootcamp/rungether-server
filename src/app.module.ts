@@ -10,11 +10,21 @@ import { EmailModule } from "./apis/mails/mails.module";
 import { RedisClientOptions } from "redis";
 import * as redisStore from "cache-manager-redis-store";
 import { AppService } from "./app.service";
+import { AttendsModule } from "./apis/attend/attends.module";
+import { FilesModule } from "./apis/files/files.module";
+import { RegionsModule } from "./apis/region/regions.module";
+import { LikesModule } from "./apis/likes/likes.module";
+import { PrefersModule } from "./apis/prefers/prefers.module";
 
 @Module({
   imports: [
+    AttendsModule,
     BoardModule,
+    FilesModule,
     EmailModule,
+    RegionsModule,
+    LikesModule,
+    PrefersModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
