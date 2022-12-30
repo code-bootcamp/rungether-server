@@ -3,12 +3,12 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 @ObjectType()
-export class Prefer {
+export class Region {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
-  prefer: string;
+  region: string;
 }

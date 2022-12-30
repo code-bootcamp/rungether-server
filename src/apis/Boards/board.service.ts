@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class BoardService {
+export class BoardsService {
   aaa() {
-    return "Hello World!3";
+    return "Hello World!4";
   }
 }
