@@ -1,3 +1,10 @@
+import { Request, Response } from "express";
+
+export interface IUserItem {
+  email: string;
+  id: string;
+}
+
 export interface IUser {
   user?: {
     email: string;

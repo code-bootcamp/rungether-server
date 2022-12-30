@@ -17,10 +17,12 @@ import { LikesModule } from "./apis/likes/likes.module";
 import { PrefersModule } from "./apis/prefers/prefers.module";
 import { CommentsModule } from "./apis/comments/comments.module";
 import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
+import { AuthModule } from "./apis/auth/auth.module";
 
 @Module({
   imports: [
     AttendsModule,
+    AuthModule,
     BoardModule,
     CommentsModule,
     NestedCommentsModule,
