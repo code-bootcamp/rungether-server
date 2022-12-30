@@ -1,54 +1,26 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from "@nestjs/graphql";
+import { Comment } from "src/apis/comments/entity/comment.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
-@Entity()
 @ObjectType()
-export class Board {
+@Entity()
+export class NestedComment {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
   @Column()
   @Field(() => String)
-  title: string;
-
-  @Column()
-  @Field(() => String)
   content: string;
-
-  @Column({ default: 1 })
-  @Field(() => Int)
-  attendCount: number;
-
-  @Column({ default: 0 })
-  @Field(() => Int)
-  pickCount: number;
-
-  @Column()
-  @Field(() => String)
-  appointment: string;
-
-  @Column()
-  @Field(() => String)
-  recruitRegion: string;
-
-  @Column()
-  @Field(() => String)
-  recruitGrade: string;
-
-  @Column()
-  @Field(() => String)
-  recruitSports: string;
 
   @CreateDateColumn()
   @Field(() => Date)
@@ -62,7 +34,10 @@ export class Board {
   @Field(() => Date)
   deletedAt: Date;
 
-  @JoinTable()
+  @ManyToOne(() => Comment)
+  @Field(() => Comment)
+  comment: Comment;
+
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;

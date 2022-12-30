@@ -18,51 +18,51 @@ export class PicksService {
     private readonly picksRepository: Repository<Pick>
   ) {}
 
-  async pick({ boardId, user }) {
-    const findUser = await this.usersRepository.findOne({
-      where: { email: user },
-    });
+  // async pick({ boardId, user }) {
+  //   const findUser = await this.usersRepository.findOne({
+  //     where: { email: user },
+  //   });
 
-    const findPick = await this.picksRepository.findOne({
-      where: {
-        board: { id: boardId },
-        user: { id: findUser.id },
-      },
-      relations: ["board", "user"],
-    });
+  //   const findPick = await this.picksRepository.findOne({
+  //     where: {
+  //       board: { id: boardId },
+  //       user: { id: findUser.id },
+  //     },
+  //     relations: ["board", "user"],
+  //   });
 
-    if (findPick) {
-      await this.picksRepository.delete({
-        board: { id: boardId },
-        user: { id: findUser.id },
-      });
+  //   if (findPick) {
+  //     await this.picksRepository.delete({
+  //       board: { id: boardId },
+  //       user: { id: findUser.id },
+  //     });
 
-      const board = await this.boardsRepository.findOne({
-        where: { id: boardId },
-      });
+  //     const board = await this.boardsRepository.findOne({
+  //       where: { id: boardId },
+  //     });
 
-      await this.boardsRepository.update(
-        { id: boardId },
-        { pick: board.pick - 1 }
-      );
+  //     await this.boardsRepository.update(
+  //       { id: boardId },
+  //       { pick: board.pick - 1 }
+  //     );
 
-      return "찜 취소";
-    } else {
-      await this.picksRepository.save({
-        board: { id: boardId },
-        user: { id: findUser.id },
-      });
+  //     return "찜 취소";
+  //   } else {
+  //     await this.picksRepository.save({
+  //       board: { id: boardId },
+  //       user: { id: findUser.id },
+  //     });
 
-      const boards = await this.boardsRepository.findOne({
-        where: { id: boardId },
-      });
+  //     const boards = await this.boardsRepository.findOne({
+  //       where: { id: boardId },
+  //     });
 
-      await this.boardsRepository.update(
-        { id: boardId },
-        { pick: boards.pick + 1 }
-      );
+  //     await this.boardsRepository.update(
+  //       { id: boardId },
+  //       { pick: boards.pick + 1 }
+  //     );
 
-      return "찜 추가";
-    }
-  }
+  //     return "찜 추가";
+  //   }
+  // }
 }

@@ -12,6 +12,11 @@ import * as redisStore from "cache-manager-redis-store";
 import { AppService } from "./app.service";
 import { AttendsModule } from "./apis/attend/attends.module";
 import { FilesModule } from "./apis/files/files.module";
+import { AuthModule } from "./apis/auth/auth.module";
+import { CommentsModule } from "./apis/comments/comments.module";
+import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
+import { JwtAccessStrategy } from "./commons/auth/jwt-access.strategy";
+import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
 
 @Module({
   imports: [
@@ -50,7 +55,7 @@ import { FilesModule } from "./apis/files/files.module";
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
       entities: [__dirname + "/apis/**/*.entity.*"],
-      synchronize: false,
+      synchronize: true,
       logging: true,
     }),
     CacheModule.register<RedisClientOptions>({

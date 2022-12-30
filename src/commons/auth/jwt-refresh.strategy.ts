@@ -25,7 +25,6 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, "refresh") {
     if (redisToken !== null) throw new UnauthorizedException();
     return {
       email: payload.email,
-      id: payload.sub,
       exp: payload.exp,
     };
   }

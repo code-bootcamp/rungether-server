@@ -1,6 +1,6 @@
 import { CreateCommentInput } from "../dto/createComment.input";
 import { UpdateCommentInput } from "../dto/updateComment.input";
-import { Comment } from "../entity/comments.entity";
+import { Comment } from "../entity/comment.entity";
 
 export interface ICreateCommentInput {
   createCommentInput: CreateCommentInput;

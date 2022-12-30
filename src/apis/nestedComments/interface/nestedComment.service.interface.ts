@@ -1,6 +1,6 @@
 import { CreateNestedCommentInput } from "../dto/createNestedComment.input";
 import { UpdateNestedCommentInput } from "../dto/updateNestedComment.input";
-import { NestedComment } from "../entity/nestedComments.entity";
+import { NestedComment } from "../entity/nestedComment.entity";
 
 export interface ICreateNestedCommentInput {
   createNestedCommentInput: CreateNestedCommentInput;

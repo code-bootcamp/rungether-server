@@ -2,20 +2,16 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { Board } from "src/apis/boards/entities/board.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
 @ObjectType()
-export class BoardImage {
+@Entity()
+export class Location {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
   @Column()
-  @Field(() => String, { nullable: true })
-  img_url: string;
-
-  @Column()
-  @Field(() => Boolean)
-  isMain: boolean;
+  @Field(() => String)
+  location: string;
 
   @ManyToOne(() => Board)
   @Field(() => Board)

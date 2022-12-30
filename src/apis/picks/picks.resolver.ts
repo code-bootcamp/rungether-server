@@ -14,6 +14,6 @@ export class PicksResolver {
     @Context() context: IContext
   ) {
     const user = context.req.user.email;
-    return this.picksService.pick({ boardId, user });
+    // return this.picksService.pick({ boardId, user });
   }
 }

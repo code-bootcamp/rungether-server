@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Comment } from "../comments/entity/comments.entity";
+import { Comment } from "../comments/entity/comment.entity";
 import { User } from "../users/entities/user.entity";
-import { NestedComment } from "./entity/nestedComments.entity";
+import { NestedComment } from "./entity/nestedComment.entity";
 import {
   ICreateNestedCommentInput,
   INestedCommentServiceDelete,

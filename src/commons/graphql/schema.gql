@@ -7,41 +7,28 @@ type User {
   email: String!
   nickname: String!
   age: String!
-  grade: String!
   gender: String!
+  profileUrl: String!
   region: String!
-  like: Int!
-}
-
-type Grade {
-  id: String!
-  grade: String!
-}
-
-type Prefer {
-  id: String!
   prefer: String!
-}
-
-type Region {
-  id: String!
-  region: String!
+  grade: String!
+  friendshipCount: Int!
 }
 
 type Board {
   id: String!
   title: String!
   content: String!
-  attend: Int!
-  pick: Int!
+  attendCount: Int!
+  pickCount: Int!
   appointment: String!
+  recruitRegion: String!
+  recruitGrade: String!
+  recruitSports: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime!
   user: User!
-  region: Region!
-  prefer: Prefer!
-  grade: Grade!
 }
 
 """
@@ -56,30 +43,31 @@ type Comment {
   updatedAt: DateTime!
   deletedAt: DateTime!
   user: User!
+  board: Board!
 }
 
 type NestedComment {
   id: String!
   content: String!
-  createAt: DateTime!
-  updateAt: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   deletedAt: DateTime!
-  user: User!
   comment: Comment!
+  user: User!
 }
 
 type Query {
   getHello: String!
   fetchComment(id: String!): Comment!
   fetchNestedComment(id: String!): NestedComment!
-  fetchGrades: [Grade!]!
-  fetchPrefers: [Prefer!]!
-  fetchRegions: [Region!]!
+  checkNickName(nickname: String!): String!
   fetchUsers: [User!]!
 }
 
 type Mutation {
   attendBoard(boardId: String!): String!
+  login(email: String!, password: String!): String!
+  logout: String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   deleteComment(id: String!): Boolean!
   updateComment(id: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
@@ -90,11 +78,6 @@ type Mutation {
   checkTokenEmail(email: String!, token: String!): String!
   uploadFile(file: Upload!): String!
   uploadFiles(files: [Upload!]!): [String!]!
-  createGrade(grade: String!): Grade!
-  pickBoard(boardId: String!): String!
-  createPrefer(prefer: String!): Prefer!
-  createRegion(region: String!): Region!
-  checkNickName(nickname: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
 }
 
@@ -125,9 +108,12 @@ scalar Upload
 
 input CreateUserInput {
   email: String!
-  nickName: String!
+  nickname: String!
   password: String!
-  region: String!
-  level: String!
+  age: String!
   gender: String!
+  imageUrl: String
+  regionId: String!
+  preferId: String!
+  gradeId: String!
 }
