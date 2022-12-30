@@ -12,25 +12,16 @@ import * as redisStore from "cache-manager-redis-store";
 import { AppService } from "./app.service";
 import { AttendsModule } from "./apis/attend/attends.module";
 import { FilesModule } from "./apis/files/files.module";
-import { RegionsModule } from "./apis/region/regions.module";
-import { PrefersModule } from "./apis/prefers/prefers.module";
-import { CommentsModule } from "./apis/comments/comments.module";
-import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
-import { GradesModule } from "./apis/grade/grades.module";
-import { PicksModule } from "./apis/picks/picks.module";
 
 @Module({
   imports: [
     AttendsModule,
+    AuthModule,
     BoardModule,
     CommentsModule,
     NestedCommentsModule,
     EmailModule,
     FilesModule,
-    GradesModule,
-    PicksModule,
-    PrefersModule,
-    RegionsModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -59,7 +50,7 @@ import { PicksModule } from "./apis/picks/picks.module";
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
       entities: [__dirname + "/apis/**/*.entity.*"],
-      synchronize: true,
+      synchronize: false,
       logging: true,
     }),
     CacheModule.register<RedisClientOptions>({
@@ -70,6 +61,6 @@ import { PicksModule } from "./apis/picks/picks.module";
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtAccessStrategy, JwtRefreshStrategy],
 })
 export class AppModule {}

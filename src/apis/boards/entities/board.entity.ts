@@ -1,7 +1,4 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { Grade } from "src/apis/grade/entities/grade.entity";
-import { Prefer } from "src/apis/prefers/entities/prefer.entity";
-import { Region } from "src/apis/region/entities/region.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
@@ -57,19 +54,4 @@ export class Board {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
-
-  @JoinTable()
-  @ManyToOne(() => Region)
-  @Field(() => Region)
-  region: Region;
-
-  @JoinTable()
-  @ManyToOne(() => Prefer)
-  @Field(() => Prefer)
-  prefer: Prefer;
-
-  @JoinTable()
-  @ManyToOne(() => Grade)
-  @Field(() => Grade)
-  grade: Grade;
 }

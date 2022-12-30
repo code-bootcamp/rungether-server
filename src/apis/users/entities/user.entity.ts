@@ -35,7 +35,7 @@ export class User {
   @Field()
   gender: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   imageUrl: string;
 
