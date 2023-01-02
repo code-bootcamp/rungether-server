@@ -59,3 +59,4 @@ export class AttendListResolver {
     return this.attendListService.findOne({ boardId });
   }
 }
+//푸쉬용
