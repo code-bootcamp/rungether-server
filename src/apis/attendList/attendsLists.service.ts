@@ -3,10 +3,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Board } from "src/apis/boards/entities/board.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import { Repository } from "typeorm";
-import { Pick } from "./entities/pick.entity";
+import { AttendList } from "./entities/attendList.entity";
 
 @Injectable()
-export class PicksService {
+export class AttendsService {
   constructor(
     @InjectRepository(Board)
     private readonly boardsRepository: Repository<Board>,
@@ -14,24 +14,16 @@ export class PicksService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
 
-    @InjectRepository(Pick)
-    private readonly picksRepository: Repository<Pick>
+    @InjectRepository(AttendList)
+    private readonly attendsRepository: Repository<AttendList>
   ) {}
 
-  async find({ userId }) {
-    const result = await this.picksRepository.find({
-      where: { user: { id: userId } },
-      relations: ["user", "board"],
-    });
-    return result;
-  }
-
-  async pick({ boardId, userId }) {
+  async attend({ boardId, user }) {
     const findUser = await this.usersRepository.findOne({
-      where: { id: userId },
+      where: { email: user },
     });
 
-    const findPick = await this.picksRepository.findOne({
+    const findAttend = await this.attendsRepository.findOne({
       where: {
         board: { id: boardId },
         user: { id: findUser.id },
@@ -39,38 +31,38 @@ export class PicksService {
       relations: ["board", "user"],
     });
 
-    if (findPick) {
-      await this.picksRepository.delete({
+    if (findAttend) {
+      await this.attendsRepository.delete({
         board: { id: boardId },
         user: { id: findUser.id },
       });
 
-      const board = await this.boardsRepository.findOne({
+      const findBoard = await this.boardsRepository.findOne({
         where: { id: boardId },
       });
 
       await this.boardsRepository.update(
         { id: boardId },
-        { pickCount: board.pickCount - 1 }
+        { attendCount: findBoard.attendCount - 1 }
       );
 
-      return "찜 취소";
+      return "참가 취소";
     } else {
-      await this.picksRepository.save({
+      await this.attendsRepository.save({
         board: { id: boardId },
         user: { id: findUser.id },
       });
 
-      const boards = await this.boardsRepository.findOne({
+      const findBoard = await this.boardsRepository.findOne({
         where: { id: boardId },
       });
 
       await this.boardsRepository.update(
         { id: boardId },
-        { pickCount: boards.pickCount + 1 }
+        { attendCount: findBoard.attendCount + 1 }
       );
 
-      return "찜 추가";
+      return "참가 등록";
     }
   }
 }

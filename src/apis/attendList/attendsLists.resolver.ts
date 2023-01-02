@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { IContext } from "src/commons/type/context";
-import { AttendsService } from "./attends.service";
+import { AttendsService } from "./attendsLists.service";
 
 @Resolver()
 export class AttendsResolver {

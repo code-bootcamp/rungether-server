@@ -11,7 +11,7 @@ import {
 
 @Entity()
 @ObjectType()
-export class Attend {
+export class AttendList {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;

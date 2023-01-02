@@ -4,16 +4,16 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity()
-export class Location {
+export class StartingPoint {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
   @Column()
   @Field(() => String)
-  location: string;
+  startingPoint: string;
 
-  @ManyToOne(() => Board)
-  @Field(() => Board)
-  board: Board;
+  @Column()
+  @Field(() => String)
+  latLng: string;
 }
