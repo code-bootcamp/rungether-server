@@ -37,7 +37,7 @@ export class BoardsResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Board)
   async createBoard(
-    @Args("createBoardInput") createBoardInpit: CreateBoradInput,
+    @Args("createBoardInput") createBoardInput: CreateBoradInput,
     @Args({ name: "imgUrl", type: () => [String] }) imgUrl: string[],
     @Context() context: IContext
   ) {
@@ -45,7 +45,7 @@ export class BoardsResolver {
 
     const result = await this.boardsService.create({
       userId,
-      createBoardInpit,
+      createBoardInput,
     });
 
     const boardId = result.id;
