@@ -11,6 +11,7 @@ export interface IUserItem {
 
 export interface IUser {
   user?: {
+    id: string;
     email: string;
     password: string;
     boardId: string;
