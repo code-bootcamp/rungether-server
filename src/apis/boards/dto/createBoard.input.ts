@@ -1,8 +1,7 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
-import { ImageInput } from "src/apis/Image/dto/image.input";
 
 @InputType()
-export class CreateBoradInput {
+export class CreateBoardInput {
   @Field(() => String)
   title: string;
 

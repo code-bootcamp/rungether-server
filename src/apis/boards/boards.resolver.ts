@@ -4,7 +4,7 @@ import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
 import { PicksService } from "../picks/picks.service";
 import { BoardsService } from "./boards.service";
-import { CreateBoradInput } from "./dto/createBoard.input";
+import { CreateBoardInput } from "./dto/createBoard.input";
 import { UpdateBoardInput } from "./dto/updateBoard.input";
 import { Board } from "./entities/board.entity";
 
@@ -45,7 +45,7 @@ export class BoardsResolver {
   @Mutation(() => Board)
   async createBoard(
     @Context() context: IContext,
-    @Args("createBoardInput") createBoardInpit: CreateBoradInput
+    @Args("createBoardInput") createBoardInput: CreateBoardInput
   ) {
     const userId = context.req.user.id;
 
