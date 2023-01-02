@@ -1,8 +1,7 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
-import { BoardsImagesService } from "../boardsImages/boardsImages.service";
 import { PicksService } from "../picks/picks.service";
 import { BoardsService } from "./boards.service";
 import { CreateBoradInput } from "./dto/createBoard.input";
@@ -13,7 +12,6 @@ import { Board } from "./entities/board.entity";
 export class BoardsResolver {
   constructor(
     private readonly boardsService: BoardsService, //
-    private readonly boardsImageService: BoardsImagesService,
     private readonly picksService: PicksService
   ) {}
 
@@ -25,8 +23,17 @@ export class BoardsResolver {
   }
 
   @Query(() => [Board])
-  fetchAllBoards() {
-    return this.boardsService.findAll();
+  fetchAllBoards(
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
+    return this.boardsService.findAll(page);
+  }
+
+  @Query(() => [Board])
+  fetchAllBoardsWihtPickCount(
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
+    return this.boardsService.findAllWhitPickCount(page);
   }
 
   @Query(() => [Board])
@@ -37,9 +44,8 @@ export class BoardsResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Board)
   async createBoard(
-    @Args("createBoardInput") createBoardInpit: CreateBoradInput,
-    @Args({ name: "imgUrl", type: () => [String] }) imgUrl: string[],
-    @Context() context: IContext
+    @Context() context: IContext,
+    @Args("createBoardInput") createBoardInpit: CreateBoradInput
   ) {
     const userId = context.req.user.id;
 
@@ -48,34 +54,35 @@ export class BoardsResolver {
       createBoardInpit,
     });
 
-    const boardId = result.id;
-    await this.boardsImageService.upload({ imgUrl, boardId });
     return result;
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Board)
-  updateBoard(
+  async updateBoard(
+    @Context() context: IContext,
     @Args("boardId") boardId: string,
-    @Args("updateBoardInput") updateBoardInput: UpdateBoardInput,
-    @Args({ name: "imgUrl", type: () => [String] }) imgUrl: string[]
+    @Args("updateBoardInput") updateBoardInput: UpdateBoardInput
   ) {
-    const reuslt = this.boardsService.update({
+    const userId = context.req.user.id;
+
+    const reuslt = await this.boardsService.update({
       boardId,
+      userId,
       updateBoardInput,
     });
-    if (imgUrl) {
-      this.boardsImageService.upload({ imgUrl, boardId });
-    }
+
     return reuslt;
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   deleteBoard(
-    @Args("boardId") boardId: string //
+    @Context() context: IContext, //
+    @Args("boardId") boardId: string
   ) {
-    // this.picksService.delete({ boardId });
-    return this.boardsService.delete({ boardId });
+    const userId = context.req.user.id;
+    this.picksService.delete({ boardId, userId });
+    return this.boardsService.delete({ boardId, userId });
   }
 }

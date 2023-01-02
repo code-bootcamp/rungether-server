@@ -15,6 +15,11 @@ type User {
   userLikeCount: Int!
 }
 
+type Image {
+  id: String!
+  imgUrl: String
+}
+
 type Board {
   id: String!
   title: String!
@@ -29,19 +34,13 @@ type Board {
   updatedAt: DateTime!
   deletedAt: DateTime!
   user: User!
+  image: Image
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type BoardImage {
-  id: String!
-  imgUrl: String
-  isMain: Boolean!
-  board: Board!
-}
 
 type Comment {
   id: String!
@@ -88,14 +87,14 @@ type ReviewComment {
   user: User!
   reviewBoard: ReviewBoard!
 }
+
 type Query {
   fetchBoard(boardId: String!): Board!
-  fetchAllBoards: [Board!]!
+  fetchAllBoards(page: Int): [Board!]!
+  fetchAllBoardsWihtPickCount(page: Int): [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
-  fetchBoardImage(boardId: String!): [BoardImage!]!
-  fetchAllBoardImages: [BoardImage!]!
-  fetchComment(id: String!): Comment!
-  fetchNestedComment(id: String!): NestedComment!
+  fetchComment(commentId: String!): Comment!
+  fetchNestedComment(nestedCommentId: String!): NestedComment!
   fetchReviewBoard(reviewBoardId: String!): ReviewBoard!
   fetchReviewComments(reviewBoardId: String!, page: Int): [ReviewComment!]!
   fetchMyPick: [Pick!]!
@@ -107,21 +106,20 @@ type Mutation {
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
-  createBoard(createBoardInput: CreateBoradInput!, imgUrl: [String!]!): Board!
-  updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!, imgUrl: [String!]!): Board!
+  createBoard(createBoardInput: CreateBoradInput!): Board!
+  updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
   deleteBoard(boardId: String!): Boolean!
-  uploadBoardImage(imgUrl: [String!]!, boardId: String!): [BoardImage!]!
   createComment(createCommentInput: CreateCommentInput!): Comment!
-  deleteComment(id: String!): Boolean!
-  updateComment(id: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
+  deleteComment(commentId: String!): Boolean!
+  updateComment(commentId: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
   sendTokenToEmail(email: String!): String!
   checkTokenEmail(email: String!, token: String!): String!
   uploadFile(file: Upload!): String!
   uploadFiles(files: [Upload!]!): [String!]!
   likeReviewBoard(reviewBoardId: String!): String!
   createNestedComment(createNestedCommentInput: CreateNestedCommentInput!): NestedComment!
-  deleteNestedComment(id: String!): Boolean!
-  updateNestedComment(id: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
+  deleteNestedComment(nestedCommentId: String!): Boolean!
+  updateNestedComment(nestedCommentId: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
   createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!): String!
   createReviewComment(reviewBoardId: String!, reviewComment: String!): ReviewComment!
   pickBoard(boardId: String!): String!
@@ -132,32 +130,32 @@ type Mutation {
 input CreateBoradInput {
   title: String!
   content: String!
-  attendCount: String!
-  pickCount: Int!
   appointment: String!
   recruitRegion: String!
   recruitGrade: String!
   recruitSports: String!
+  image: String
 }
 
 input UpdateBoardInput {
   title: String
   content: String
-  attendCount: String
-  pickCount: Int
   appointment: String
   recruitRegion: String
   recruitGrade: String
   recruitSports: String
+  image: String
 }
 
 input CreateCommentInput {
   userId: String!
+  boardId: String!
   content: String!
 }
 
 input UpdateCommentInput {
   userId: String
+  boardId: String
   content: String
 }
 

@@ -4,8 +4,7 @@ import { Board } from "src/apis/boards/entities/board.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import { AttendList } from "../attendList/entities/attendList.entity";
 import { BoardsService } from "../boards/boards.service";
-import { BoardsImagesService } from "../boardsImages/boardsImages.service";
-import { BoardImage } from "../boardsImages/entities/boardImage.entity";
+import { Image } from "../Image/entities/image.entity";
 import { Comment } from "../comments/entity/comment.entity";
 import { StartingPoint } from "../startingPoint/entities/startingPoint.entity";
 import { Pick } from "./entities/pick.entity";
@@ -18,7 +17,7 @@ import { PicksService } from "./picks.service";
       Pick, //
       User,
       Board,
-      BoardImage,
+      Image,
       AttendList,
       StartingPoint,
       Comment,
@@ -29,7 +28,6 @@ import { PicksService } from "./picks.service";
     PicksResolver, //
     PicksService,
     BoardsService,
-    BoardsImagesService,
   ],
 })
 export class PicksModule {}

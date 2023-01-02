@@ -22,15 +22,12 @@ import { ReviewCommentsModule } from "./apis/reviewComments/reviewComments.modul
 import { LikeModule } from "./apis/like/like.module";
 import { UserLikeModule } from "./apis/userLike/userLike.module";
 import { AttendListModule } from "./apis/attendList/attendList.module";
-import { BoardsImagesModule } from "./apis/boardsImages/boardsImages.module";
-import { AttendsListsModule } from "./apis/attendList/attendsLists.module";
 
 @Module({
   imports: [
     AttendListModule,
     AuthModule,
     BoardModule,
-    BoardsImagesModule,
     CommentsModule,
     EmailModule,
     FilesModule,
