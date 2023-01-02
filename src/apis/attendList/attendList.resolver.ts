@@ -54,9 +54,11 @@ export class AttendListResolver {
     return this.attendListService.create({ user, board });
   }
 
-  @Query(() => AttendList)
-  fetchAttendList(@Args("boardId") boardId: string) {
-    return this.attendListService.findOne({ boardId });
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [AttendList])
+  fetchAttendList(@Context() context: IContext) {
+    const userId = context.req.user.id;
+    return this.attendListService.findAll({ userId });
   }
 }
 //푸쉬용
