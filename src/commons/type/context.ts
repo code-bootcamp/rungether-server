@@ -12,8 +12,8 @@ export interface IUserItem {
 
 export interface IUser {
   user?: {
-    email: string;
     id: string;
+    email: string;
     exp: number;
     password: string;
   };

@@ -52,3 +52,4 @@ export class AttendList {
   @Field(() => Date)
   deletedAt: Date;
 }
+
