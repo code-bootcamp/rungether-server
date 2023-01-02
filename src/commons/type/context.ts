@@ -14,6 +14,7 @@ export interface IUser {
     email: string;
     password: string;
     boardId: string;
+    id: string;
   };
 }
 

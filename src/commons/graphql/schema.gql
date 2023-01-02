@@ -36,6 +36,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type BoardImage {
+  id: String!
+  imgUrl: String
+  isMain: Boolean!
+  board: Board!
+}
+
 type Comment {
   id: String!
   content: String!
@@ -44,6 +51,12 @@ type Comment {
   deletedAt: DateTime!
   user: User!
   board: Board!
+}
+
+type Pick {
+  id: String!
+  board: Board!
+  user: User!
 }
 
 type NestedComment {
@@ -56,10 +69,24 @@ type NestedComment {
   user: User!
 }
 
+type ReviewBoard {
+  id: String!
+  title: String!
+  content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
 type Query {
-  getHello: String!
+  fetchBoard(boardId: String!): Board!
+  fetchAllBoards: [Board!]!
+  fetchAllBoardsWithDelete: [Board!]!
+  fetchBoardImage(boardId: String!): [BoardImage!]!
+  fetchAllBoardImages: [BoardImage!]!
   fetchComment(id: String!): Comment!
   fetchNestedComment(id: String!): NestedComment!
+  fetchMyPick: [Pick!]!
   checkNickName(nickname: String!): String!
   fetchUsers: [User!]!
 }
@@ -68,6 +95,10 @@ type Mutation {
   attendBoard(boardId: String!): String!
   login(email: String!, password: String!): String!
   logout: String!
+  createBoard(createBoardInput: CreateBoradInput!, imgUrl: [String!]!): Board!
+  updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!, imgUrl: [String!]!): Board!
+  deleteBoard(boardId: String!): Boolean!
+  uploadBoardImage(imgUrl: [String!]!, boardId: String!): [BoardImage!]!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   deleteComment(id: String!): Boolean!
   updateComment(id: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
@@ -78,7 +109,30 @@ type Mutation {
   checkTokenEmail(email: String!, token: String!): String!
   uploadFile(file: Upload!): String!
   uploadFiles(files: [Upload!]!): [String!]!
+  pickBoard(boardId: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateBoradInput {
+  title: String!
+  content: String!
+  attendCount: String!
+  pickCount: Int!
+  appointment: String!
+  recruitRegion: String!
+  recruitGrade: String!
+  recruitSports: String!
+}
+
+input UpdateBoardInput {
+  title: String
+  content: String
+  attendCount: String
+  pickCount: Int
+  appointment: String
+  recruitRegion: String
+  recruitGrade: String
+  recruitSports: String
 }
 
 input CreateCommentInput {

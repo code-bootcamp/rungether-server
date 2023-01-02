@@ -1,7 +1,12 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Board } from "src/apis/boards/entities/board.entity";
 import { User } from "src/apis/users/entities/user.entity";
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity()
 @ObjectType()
@@ -17,4 +22,7 @@ export class Pick {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
