@@ -56,9 +56,8 @@ export class BoardsService {
     });
   }
 
-
-  async create({ userId, createBoardInpit }) {
-    const { image, ...board } = createBoardInpit;
+  async create({ userId, createBoardInput }) {
+    const { image, ...board } = createBoardInput;
 
     const User = await this.usersRepository.findOne({
       where: { id: userId },
