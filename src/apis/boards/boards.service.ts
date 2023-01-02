@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { throws } from "assert";
 import { Repository } from "typeorm";
 import { BoardImage } from "../boardsImages/entities/boardImage.entity";
 import { Comment } from "../comments/entity/comment.entity";
@@ -53,8 +52,8 @@ export class BoardsService {
     });
   }
 
-  async create({ userId, createBoardInpit }) {
-    const { ...board } = createBoardInpit;
+  async create({ userId, createBoardInput }) {
+    const { ...board } = createBoardInput;
 
     const checkCountBoard = await this.findAllByUserId({ userId });
     if (checkCountBoard.length >= 5) {

@@ -9,12 +9,6 @@ export class CreateBoradInput {
   content: string;
 
   @Field(() => String)
-  attendCount: string;
-
-  @Field(() => Int)
-  pickCount: number;
-
-  @Field(() => String)
   appointment: string;
 
   @Field(() => String)

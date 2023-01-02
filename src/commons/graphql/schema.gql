@@ -59,16 +59,6 @@ type Pick {
   user: User!
 }
 
-type NestedComment {
-  id: String!
-  content: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime!
-  comment: Comment!
-  user: User!
-}
-
 type ReviewBoard {
   id: String!
   title: String!
@@ -78,6 +68,25 @@ type ReviewBoard {
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime!
+}
+
+type AttendList {
+  id: String!
+  user: User!
+  board: Board!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type NestedComment {
+  id: String!
+  content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  comment: Comment!
+  user: User!
 }
 
 type ReviewComment {
@@ -90,6 +99,7 @@ type ReviewComment {
 }
 
 type Query {
+  fetchAttendList(boardId: String!): AttendList!
   fetchBoard(boardId: String!): Board!
   fetchAllBoards: [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
@@ -105,6 +115,7 @@ type Query {
 }
 
 type Mutation {
+  attendList(boardId: String!): AttendList!
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
@@ -123,7 +134,8 @@ type Mutation {
   createNestedComment(createNestedCommentInput: CreateNestedCommentInput!): NestedComment!
   deleteNestedComment(nestedCommentId: String!): Boolean!
   updateNestedComment(nestedCommentId: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
-  createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!): String!
+  createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!, attendListId: String!): ReviewBoard!
+  deleteReviewBoard(reviewBoardId: String!): String!
   createReviewComment(reviewBoardId: String!, reviewComment: String!): ReviewComment!
   pickBoard(boardId: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
@@ -133,8 +145,6 @@ type Mutation {
 input CreateBoradInput {
   title: String!
   content: String!
-  attendCount: String!
-  pickCount: Int!
   appointment: String!
   recruitRegion: String!
   recruitGrade: String!
@@ -144,8 +154,6 @@ input CreateBoradInput {
 input UpdateBoardInput {
   title: String
   content: String
-  attendCount: String
-  pickCount: Int
   appointment: String
   recruitRegion: String
   recruitGrade: String

@@ -1,7 +1,6 @@
 .env
 .env.*
 gcp-file-storage.json
-schema.gql
 
 # compiled output
 dist
