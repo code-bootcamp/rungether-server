@@ -34,11 +34,13 @@ export class AttendListService {
     });
   }
 
-  async findOne(type) {
-    const result = await this.attendListRepository.findOne({
-      where: type,
+  async findAll({ userId }) {
+    const result = await this.attendListRepository.find({
+      where: { user: { id: userId } },
       relations: ["user", "board"],
     });
+
+    console.log(result);
     return result;
   }
 }

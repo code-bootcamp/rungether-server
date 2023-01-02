@@ -59,9 +59,12 @@ export class ReviewBoardsService {
   }
 
   async delete({ userId, reviewBoardId }) {
-    const user = await this.usersRepository.findOne({
-      where: { id: userId },
+    const reviewBoard = await this.reviewBoardsRepository.findOne({
+      where: { id: reviewBoardId },
+      relations: ["user"],
     });
+
+    if (userId !== reviewBoard.user.id) throw new Error("권한이 없습니다.");
 
     this.reviewCommentRepository.delete({
       reviewBoard: { id: reviewBoardId },
@@ -69,6 +72,7 @@ export class ReviewBoardsService {
 
     const result = await this.reviewBoardsRepository.delete({
       id: reviewBoardId,
+      user: { id: userId },
     });
 
     return result.affected ? true : false;
