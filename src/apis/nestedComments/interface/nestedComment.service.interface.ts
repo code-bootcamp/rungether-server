@@ -8,17 +8,13 @@ export interface ICreateNestedCommentInput {
   user: string;
 }
 
-export interface INestedCommentServiceFindOne {
-  id: string;
-}
-
 export interface INestedCommentServiceDelete {
-  id: string;
-  context: IContext;
+  nestedCommentId: string;
+  user: string;
 }
 
 export interface INestedCommentServiceUpdate {
   user: string;
-  nestedCommentId: NestedComment;
+  nestedCommentId: string;
   updateNestedCommentInput: UpdateNestedCommentInput;
 }
