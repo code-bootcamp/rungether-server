@@ -10,28 +10,34 @@ import { EmailModule } from "./apis/mails/mails.module";
 import { RedisClientOptions } from "redis";
 import * as redisStore from "cache-manager-redis-store";
 import { AppService } from "./app.service";
-import { AttendsModule } from "./apis/attend/attends.module";
 import { FilesModule } from "./apis/files/files.module";
-import { CommentsModule } from "./apis/comments/comments.module";
-import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
 import { PicksModule } from "./apis/picks/picks.module";
 import { AuthModule } from "./apis/auth/auth.module";
 import { CommentsModule } from "./apis/comments/comments.module";
 import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
 import { JwtAccessStrategy } from "./commons/auth/jwt-access.strategy";
 import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
+import { ReviewBoardsModule } from "./apis/reviewBoards/reviewBoards.module";
+import { ReviewCommentsModule } from "./apis/reviewComments/reviewComments.module";
+import { LikeModule } from "./apis/like/like.module";
+import { UserLikeModule } from "./apis/userLike/userLike.module";
+import { AttendListModule } from "./apis/attendList/attendList.module";
 
 @Module({
   imports: [
-    AttendsModule,
+    AttendListModule,
     AuthModule,
     BoardModule,
     CommentsModule,
-    NestedCommentsModule,
     EmailModule,
     FilesModule,
+    LikeModule,
+    NestedCommentsModule,
+    ReviewBoardsModule,
+    ReviewCommentsModule,
     PicksModule,
     UsersModule,
+    UserLikeModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: "src/commons/graphql/schema.gql",
@@ -61,6 +67,7 @@ import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
       entities: [__dirname + "/apis/**/*.entity.*"],
       synchronize: true,
       logging: true,
+      timezone: "z",
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,

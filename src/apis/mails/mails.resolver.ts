@@ -43,9 +43,9 @@ export class MailsResolver {
     if (cacheTokenEmail === token) {
       await this.cacheManager.set(email, true, { ttl: 800 });
       return "인증완료";
-    }
-    if (cacheTokenEmail !== token) {
+    } else if (cacheTokenEmail !== token) {
       throw new NotFoundException("인증번호가 일치하지 않습니다.");
-    }
+    } else
+      throw new NotFoundException("만료되었거나 인증완료 된 인증번호 입니다.");
   }
 }

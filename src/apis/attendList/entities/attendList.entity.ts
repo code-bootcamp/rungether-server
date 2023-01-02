@@ -1,5 +1,6 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { AttendList } from "src/apis/attendList/entities/attendList.entity";
+import { Field, ObjectType } from "@nestjs/graphql";
+import { Board } from "src/apis/boards/entities/board.entity";
+import { ReviewBoard } from "src/apis/reviewBoards/entities/reviewBoard.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
@@ -16,31 +17,28 @@ import {
 
 @Entity()
 @ObjectType()
-export class ReviewBoard {
+export class AttendList {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
-
-  @Column()
-  @Field(() => String)
-  title: string;
-
-  @Column("text")
-  @Field(() => String)
-  content: string;
-
-  @Column({ default: 0 })
-  @Field(() => Int)
-  like: number;
 
   @JoinTable()
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
 
-  @JoinColumn()
-  @OneToOne(() => AttendList)
-  attendList: AttendList;
+  @JoinTable()
+  @ManyToOne(() => Board)
+  @Field(() => Board)
+  board: Board;
+
+  // @JoinColumn()
+  // @OneToOne(() => ReviewBoard)
+  // reviewBoard: ReviewBoard;
+
+  // @Column()
+  // @Field(() => String)
+  // status: string;
 
   @CreateDateColumn()
   @Field(() => Date)

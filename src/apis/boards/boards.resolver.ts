@@ -4,9 +4,9 @@ import { BoardService } from "./boards.service";
 @Resolver()
 export class BoardResolver {
   constructor(
-    private readonly boardService: BoardService, //
-    private readonly boardImageService: BoardImageSer
-  ) {}
+    private readonly boardService: BoardService //
+  ) // private readonly boardImageService: BoardImageSer
+  {}
 
   @Query(() => String)
   getHello() {

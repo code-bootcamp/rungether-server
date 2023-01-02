@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 export interface IAuthUserItem {
   email: string;
+  id: string;
   exp: number;
 }
 
@@ -12,8 +13,9 @@ export interface IUserItem {
 export interface IUser {
   user?: {
     email: string;
+    id: string;
+    exp: number;
     password: string;
-    boardId: string;
   };
 }
 
