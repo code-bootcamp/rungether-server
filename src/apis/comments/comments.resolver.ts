@@ -30,7 +30,7 @@ export class CommentsResolver {
 
   @Query(() => Comment)
   fetchComment(@Args("commentId") commentId: string) {
-    return this.commentsService.findOne({ id: commentId });
+    return this.commentsService.findOne({ commentId });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -39,7 +39,8 @@ export class CommentsResolver {
     @Context() context: IContext,
     @Args("commentId") commentId: string
   ): Promise<boolean> {
-    return this.commentsService.delete({ id: commentId, context });
+    const user = context.req.user.id;
+    return this.commentsService.delete({ commentId, user });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -50,10 +51,7 @@ export class CommentsResolver {
     @Args("UpdateCommentInput") updateCommentInput: UpdateCommentInput
   ): Promise<Comment> {
     const user = context.req.user.id;
-    const comment = await this.commentRepository.findOne({
-      where: { id: commentId },
-    });
 
-    return this.commentsService.update({ comment, updateCommentInput, user });
+    return this.commentsService.update({ commentId, updateCommentInput, user });
   }
 }

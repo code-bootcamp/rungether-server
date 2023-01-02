@@ -88,14 +88,15 @@ type ReviewComment {
   user: User!
   reviewBoard: ReviewBoard!
 }
+
 type Query {
   fetchBoard(boardId: String!): Board!
   fetchAllBoards: [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
   fetchBoardImage(boardId: String!): [BoardImage!]!
   fetchAllBoardImages: [BoardImage!]!
-  fetchComment(id: String!): Comment!
-  fetchNestedComment(id: String!): NestedComment!
+  fetchComment(commentId: String!): Comment!
+  fetchNestedComment(nestedCommentId: String!): NestedComment!
   fetchReviewBoard(reviewBoardId: String!): ReviewBoard!
   fetchReviewComments(reviewBoardId: String!, page: Int): [ReviewComment!]!
   fetchMyPick: [Pick!]!
@@ -112,16 +113,16 @@ type Mutation {
   deleteBoard(boardId: String!): Boolean!
   uploadBoardImage(imgUrl: [String!]!, boardId: String!): [BoardImage!]!
   createComment(createCommentInput: CreateCommentInput!): Comment!
-  deleteComment(id: String!): Boolean!
-  updateComment(id: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
+  deleteComment(commentId: String!): Boolean!
+  updateComment(commentId: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
   sendTokenToEmail(email: String!): String!
   checkTokenEmail(email: String!, token: String!): String!
   uploadFile(file: Upload!): String!
   uploadFiles(files: [Upload!]!): [String!]!
   likeReviewBoard(reviewBoardId: String!): String!
   createNestedComment(createNestedCommentInput: CreateNestedCommentInput!): NestedComment!
-  deleteNestedComment(id: String!): Boolean!
-  updateNestedComment(id: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
+  deleteNestedComment(nestedCommentId: String!): Boolean!
+  updateNestedComment(nestedCommentId: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
   createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!): String!
   createReviewComment(reviewBoardId: String!, reviewComment: String!): ReviewComment!
   pickBoard(boardId: String!): String!
@@ -152,12 +153,12 @@ input UpdateBoardInput {
 }
 
 input CreateCommentInput {
-  userId: String!
+  boardId: String!
   content: String!
 }
 
 input UpdateCommentInput {
-  userId: String
+  boardId: String
   content: String
 }
 
