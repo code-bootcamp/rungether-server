@@ -34,7 +34,7 @@ export class NestedCommentsResolver {
 
   @Query(() => NestedComment)
   fetchNestedComment(@Args("nestedCommentId") nestedCommentId: string) {
-    return this.nestedCommentsService.findOne({ id: nestedCommentId });
+    return this.nestedCommentsService.findOne({ nestedCommentId });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -43,7 +43,8 @@ export class NestedCommentsResolver {
     @Context() context: IContext,
     @Args("nestedCommentId") nestedCommentId: string
   ): Promise<boolean> {
-    return this.nestedCommentsService.delete({ id: nestedCommentId, context });
+    const user = context.req.user.id;
+    return this.nestedCommentsService.delete({ nestedCommentId, user });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -55,11 +56,9 @@ export class NestedCommentsResolver {
     updateNestedCommentInput: UpdateNestedCommentInput
   ): Promise<NestedComment> {
     const user = context.req.user.id;
-    const nestedComment = await this.nestedCommentRepository.findOne({
-      where: { id: nestedCommentId },
-    });
+
     return this.nestedCommentsService.update({
-      nestedComment,
+      nestedCommentId,
       updateNestedCommentInput,
       user,
     });
