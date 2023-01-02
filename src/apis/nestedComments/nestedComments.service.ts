@@ -55,8 +55,13 @@ export class NestedCommentsService {
     return result.affected ? true : false;
   }
 
-  update({ nestedComment, updateNestedCommentInput }): Promise<NestedComment> {
+  update({
+    nestedComment,
+    updateNestedCommentInput,
+    user,
+  }): Promise<NestedComment> {
     const result = this.nestedCommentRepository.save({
+      ...user,
       ...nestedComment,
       ...updateNestedCommentInput,
     });

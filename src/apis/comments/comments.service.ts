@@ -16,8 +16,20 @@ export class CommentsService {
   ) {}
 
   async create({ createCommentInput }: ICreateCommentInput) {
-    const { ...comment } = createCommentInput;
+    const { userId, boardId, ...comment } = createCommentInput;
+    const resultUser = await this.commentRepository.findOne({
+      where: { id: userId },
+    });
+    const resultBoard = await this.commentRepository.findOne({
+      where: { id: boardId },
+    });
     const result = await this.commentRepository.save({
+      user: {
+        ...resultUser,
+      },
+      board: {
+        ...resultBoard,
+      },
       ...comment,
     });
     return result;
@@ -26,6 +38,7 @@ export class CommentsService {
   findOne({ id }: ICommentServiceFindOne) {
     return this.commentRepository.findOne({
       where: { id },
+      relations: ["user", "board"],
     });
   }
 
@@ -34,8 +47,9 @@ export class CommentsService {
     return result.affected ? true : false;
   }
 
-  update({ comment, updateCommentInput }): Promise<Comment> {
+  update({ comment, updateCommentInput, user }): Promise<Comment> {
     const result = this.commentRepository.save({
+      ...user,
       ...comment,
       ...updateCommentInput,
     });
