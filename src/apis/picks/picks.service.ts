@@ -73,4 +73,11 @@ export class PicksService {
       return "찜 추가";
     }
   }
+
+  async delete({ boardId, userId }) {
+    return await this.picksRepository.delete({
+      board: boardId,
+      user: userId,
+    });
+  }
 }

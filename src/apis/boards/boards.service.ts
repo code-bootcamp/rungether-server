@@ -1,9 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { BoardImage } from "../boardsImages/entities/boardImage.entity";
-import { Comment } from "../comments/entity/comment.entity";
-import { Pick } from "../picks/entities/pick.entity";
+import { Image } from "../Image/entities/image.entity";
 import { User } from "../users/entities/user.entity";
 import { Board } from "./entities/board.entity";
 
@@ -13,23 +11,17 @@ export class BoardsService {
     @InjectRepository(Board)
     private readonly boardsRepository: Repository<Board>,
 
+    @InjectRepository(Image)
+    private readonly imagesRepository: Repository<Image>,
+
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
-
-    @InjectRepository(BoardImage)
-    private readonly boardsImagesRepository: Repository<BoardImage>,
-
-    @InjectRepository(Pick)
-    private readonly picksRepository: Repository<Pick>,
-
-    @InjectRepository(Comment)
-    private readonly commentsRepository: Repository<Comment>
+    private readonly usersRepository: Repository<User>
   ) {}
 
   findOneById({ boardId }) {
     return this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ["user"],
+      relations: ["user", "image"],
     });
   }
 
@@ -39,9 +31,21 @@ export class BoardsService {
     });
   }
 
-  findAll() {
+  findAll(page) {
     return this.boardsRepository.find({
-      relations: ["user"],
+      relations: ["user", "image"],
+      order: { createdAt: "DESC" },
+      take: 9,
+      skip: page ? (page - 1) * 9 : 0,
+    });
+  }
+
+  findAllWhitPickCount(page) {
+    return this.boardsRepository.find({
+      relations: ["user", "image"],
+      order: { pickCount: "DESC" },
+      take: 9,
+      skip: page ? (page - 1) * 9 : 0,
     });
   }
 
@@ -52,43 +56,83 @@ export class BoardsService {
     });
   }
 
-  async create({ userId, createBoardInput }) {
-    const { ...board } = createBoardInput;
+
+  async create({ userId, createBoardInpit }) {
+    const { image, ...board } = createBoardInpit;
+
+    const User = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+    let Image = null;
+    if (image) {
+      Image = await this.imagesRepository.save({
+        ...image,
+      });
+    }
 
     const checkCountBoard = await this.findAllByUserId({ userId });
-    if (checkCountBoard.length >= 5) {
-      throw new Error("게시글은 5개까지만 작성 가능합니다.");
+    if (checkCountBoard.length >= 20) {
+      throw new Error("게시글은 20개까지만 작성 가능합니다.");
     }
 
     const result = await this.boardsRepository.save({
       ...board,
-      user: { id: userId },
+      image: Image,
+      user: { ...User },
     });
 
     return result;
   }
 
-  async update({ boardId, updateBoardInput }) {
-    const board = await this.findOneById({ boardId });
+  async update({ boardId, userId, updateBoardInput }) {
+    const { image, ...board } = updateBoardInput;
+
+    const Board = await this.findOneById({ boardId });
+
+    const Image = await this.imagesRepository.save({
+      ...image,
+    });
+
+    const User = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!Board) {
+      throw new UnprocessableEntityException("존재하지 않는 게시글 입니다!");
+    }
+
+    if (userId !== Board.user.id) {
+      throw new UnprocessableEntityException("게시글 수정 권한이 없습니다!");
+    }
+
     return this.boardsRepository.save({
-      ...board,
-      id: boardId,
+      ...Board,
       ...updateBoardInput,
+      image: Image,
+      id: boardId,
+      user: { ...User },
     });
   }
 
-  async delete({ boardId }) {
+  async delete({ boardId, userId }) {
+    const User = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    const Board = await this.boardsRepository.findOne({
+      where: { id: boardId },
+      relations: ["user"],
+    });
+
+    if (userId !== Board.user.id) {
+      throw new UnprocessableEntityException("삭제 권한이 없습니다!");
+    }
+
     const result = await this.boardsRepository.softDelete({
       id: boardId,
+      user: { id: userId },
     });
 
-    this.commentsRepository.softDelete({ board: { id: boardId } });
-
-    this.boardsImagesRepository.softDelete({
-      board: { id: boardId },
-    });
-
-    this.boardsImagesRepository.softDelete({ board: boardId });
     return result.affected ? true : false;
   }
 }

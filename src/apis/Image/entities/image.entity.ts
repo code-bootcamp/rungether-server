@@ -10,7 +10,7 @@ import {
 
 @Entity()
 @ObjectType()
-export class BoardImage {
+export class Image {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
@@ -18,14 +18,6 @@ export class BoardImage {
   @Column()
   @Field(() => String, { nullable: true })
   imgUrl: string;
-
-  @Column()
-  @Field(() => Boolean)
-  isMain: boolean;
-
-  @ManyToOne(() => Board)
-  @Field(() => Board)
-  board: Board;
 
   @DeleteDateColumn()
   deletedAt: Date;
