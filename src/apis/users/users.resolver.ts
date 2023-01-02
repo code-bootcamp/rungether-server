@@ -14,7 +14,7 @@ export class UsersResolver {
   async checkNickName(
     @Args("nickname") nickname: string //
   ) {
-    const findNickName = await this.usersService.findNickname({ nickname });
+    const findNickName = await this.usersService.findOne({ nickname });
     if (findNickName) {
       return false;
     } else return true;

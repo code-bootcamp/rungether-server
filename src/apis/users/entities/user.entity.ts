@@ -52,7 +52,7 @@ export class User {
 
   @Column({ default: 0 })
   @Field(() => Int)
-  friendshipCount: number;
+  userLikeCount: number;
 
   @CreateDateColumn()
   createdAt: Date;

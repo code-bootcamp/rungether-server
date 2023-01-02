@@ -12,7 +12,7 @@ type User {
   region: String!
   prefer: String!
   grade: String!
-  friendshipCount: Int!
+  userLikeCount: Int!
 }
 
 type Board {
@@ -73,11 +73,21 @@ type ReviewBoard {
   id: String!
   title: String!
   content: String!
+  like: Int!
+  user: User!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime!
 }
 
+type ReviewComment {
+  id: String!
+  reviewComment: String!
+  createdAt: DateTime!
+  deletedAt: DateTime!
+  user: User!
+  reviewBoard: ReviewBoard!
+}
 type Query {
   fetchBoard(boardId: String!): Board!
   fetchAllBoards: [Board!]!
@@ -86,14 +96,16 @@ type Query {
   fetchAllBoardImages: [BoardImage!]!
   fetchComment(id: String!): Comment!
   fetchNestedComment(id: String!): NestedComment!
+  fetchReviewBoard(reviewBoardId: String!): ReviewBoard!
+  fetchReviewComments(reviewBoardId: String!, page: Int): [ReviewComment!]!
   fetchMyPick: [Pick!]!
   checkNickName(nickname: String!): String!
   fetchUsers: [User!]!
 }
 
 type Mutation {
-  attendBoard(boardId: String!): String!
   login(email: String!, password: String!): String!
+  restoreAccessToken: String!
   logout: String!
   createBoard(createBoardInput: CreateBoradInput!, imgUrl: [String!]!): Board!
   updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!, imgUrl: [String!]!): Board!
@@ -102,15 +114,19 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   deleteComment(id: String!): Boolean!
   updateComment(id: String!, UpdateCommentInput: UpdateCommentInput!): Comment!
-  createNestedComment(createNestedCommentInput: CreateNestedCommentInput!): NestedComment!
-  deleteNestedComment(id: String!): Boolean!
-  updateNestedComment(id: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
   sendTokenToEmail(email: String!): String!
   checkTokenEmail(email: String!, token: String!): String!
   uploadFile(file: Upload!): String!
   uploadFiles(files: [Upload!]!): [String!]!
+  likeReviewBoard(reviewBoardId: String!): String!
+  createNestedComment(createNestedCommentInput: CreateNestedCommentInput!): NestedComment!
+  deleteNestedComment(id: String!): Boolean!
+  updateNestedComment(id: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
+  createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!): String!
+  createReviewComment(reviewBoardId: String!, reviewComment: String!): ReviewComment!
   pickBoard(boardId: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
+  likeUser(userId: String!): String!
 }
 
 input CreateBoradInput {
@@ -145,6 +161,9 @@ input UpdateCommentInput {
   content: String
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input CreateNestedCommentInput {
   content: String!
   commentId: String!
@@ -157,8 +176,10 @@ input UpdateNestedCommentInput {
   userId: String
 }
 
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
+input CreateReviewBoardInput {
+  title: String!
+  content: String!
+}
 
 input CreateUserInput {
   email: String!
@@ -166,8 +187,8 @@ input CreateUserInput {
   password: String!
   age: String!
   gender: String!
-  imageUrl: String
-  regionId: String!
-  preferId: String!
-  gradeId: String!
+  profileUrl: String
+  region: String!
+  prefer: String!
+  grade: String!
 }

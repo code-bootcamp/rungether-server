@@ -18,14 +18,14 @@ export class CreateUserInput {
   gender: string;
 
   @Field({ nullable: true })
-  imageUrl: string;
+  profileUrl: string;
 
   @Field()
-  regionId: string;
+  region: string;
 
   @Field()
-  preferId: string;
+  prefer: string;
 
   @Field()
-  gradeId: string;
+  grade: string;
 }

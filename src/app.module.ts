@@ -17,21 +17,30 @@ import { CommentsModule } from "./apis/comments/comments.module";
 import { NestedCommentsModule } from "./apis/nestedComments/nestedComments.module";
 import { JwtAccessStrategy } from "./commons/auth/jwt-access.strategy";
 import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
+import { ReviewBoardsModule } from "./apis/reviewBoards/reviewBoards.module";
+import { ReviewCommentsModule } from "./apis/reviewComments/reviewComments.module";
+import { LikeModule } from "./apis/like/like.module";
+import { UserLikeModule } from "./apis/userLike/userLike.module";
+import { AttendListModule } from "./apis/attendList/attendList.module";
 import { BoardsImagesModule } from "./apis/boardsImages/boardsImages.module";
 import { AttendsListsModule } from "./apis/attendList/attendsLists.module";
 
 @Module({
   imports: [
-    AttendsListsModule,
+    AttendListModule,
     AuthModule,
     BoardModule,
     BoardsImagesModule,
     CommentsModule,
-    NestedCommentsModule,
     EmailModule,
     FilesModule,
+    LikeModule,
+    NestedCommentsModule,
+    ReviewBoardsModule,
+    ReviewCommentsModule,
     PicksModule,
     UsersModule,
+    UserLikeModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: "src/commons/graphql/schema.gql",
@@ -61,6 +70,7 @@ import { AttendsListsModule } from "./apis/attendList/attendsLists.module";
       entities: [__dirname + "/apis/**/*.entity.*"],
       synchronize: true,
       logging: true,
+      timezone: "z",
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,

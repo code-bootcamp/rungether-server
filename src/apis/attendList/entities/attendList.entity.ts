@@ -1,12 +1,18 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Board } from "src/apis/boards/entities/board.entity";
+import { ReviewBoard } from "src/apis/reviewBoards/entities/reviewBoard.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 
 @Entity()
@@ -16,19 +22,34 @@ export class AttendList {
   @Field(() => String)
   id: string;
 
-  @Column()
-  @Field(() => String)
-  status: string;
+  @JoinTable()
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
 
+  @JoinTable()
   @ManyToOne(() => Board)
   @Field(() => Board)
   board: Board;
 
-  @ManyToOne(() => User)
-  @Field(() => User)
-  user: User;
+  // @JoinColumn()
+  // @OneToOne(() => ReviewBoard)
+  // reviewBoard: ReviewBoard;
+
+  // @Column()
+  // @Field(() => String)
+  // status: string;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field(() => Date)
+  updatedAt: Date;
 
   @DeleteDateColumn()
   @Field(() => Date)
   deletedAt: Date;
 }
+
