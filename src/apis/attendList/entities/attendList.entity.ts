@@ -32,9 +32,9 @@ export class AttendList {
   @Field(() => Board)
   board: Board;
 
-  // @JoinColumn()
-  // @OneToOne(() => ReviewBoard)
-  // reviewBoard: ReviewBoard;
+  @JoinColumn()
+  @OneToOne(() => ReviewBoard)
+  reviewBoard: ReviewBoard;
 
   // @Column()
   // @Field(() => String)
@@ -52,4 +52,3 @@ export class AttendList {
   @Field(() => Date)
   deletedAt: Date;
 }
-

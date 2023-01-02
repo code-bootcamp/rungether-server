@@ -56,6 +56,7 @@ export class BoardsService {
     });
   }
 
+
   async create({ userId, createBoardInpit }) {
     const { image, ...board } = createBoardInpit;
 

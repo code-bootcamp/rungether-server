@@ -51,7 +51,7 @@ export class BoardsResolver {
 
     const result = await this.boardsService.create({
       userId,
-      createBoardInpit,
+      createBoardInput,
     });
 
     return result;

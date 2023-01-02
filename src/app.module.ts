@@ -23,6 +23,7 @@ import { LikeModule } from "./apis/like/like.module";
 import { UserLikeModule } from "./apis/userLike/userLike.module";
 import { AttendListModule } from "./apis/attendList/attendList.module";
 
+
 @Module({
   imports: [
     AttendListModule,
@@ -67,7 +68,7 @@ import { AttendListModule } from "./apis/attendList/attendList.module";
       entities: [__dirname + "/apis/**/*.entity.*"],
       synchronize: true,
       logging: true,
-      timezone: "z",
+      // timezone: "z",
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
