@@ -44,7 +44,10 @@ export class AuthService {
       "Set-Cookie",
       `refreshToken=${refreshToken}; path=/; domain=.backkim.shop; SameSite=None; Secure; httpOnly`
     );
-    // res.setHeader('Set-Cookie', refreshToken= ${refreshToken}; path=/;`); 개발환경
+    res.setHeader(
+      "Set-Cookie",
+      `refreshToken=${refreshToken}; path=/; Secure; httpOnly;`
+    );
     return refreshToken;
   }
 }
