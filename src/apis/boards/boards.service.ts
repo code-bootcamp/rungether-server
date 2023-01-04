@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { Image } from "../Image/entities/image.entity";
 import { User } from "../users/entities/user.entity";
 import { Board } from "./entities/board.entity";
@@ -56,13 +56,21 @@ export class BoardsService {
     });
   }
 
+  async serchAllBoards({ word }) {
+    return await this.boardsRepository.findBy({
+      title: Like(`%${word}%`),
+    });
+  }
+
   async create({ userId, createBoardInput }) {
     const { image, ...board } = createBoardInput;
 
     const User = await this.usersRepository.findOne({
       where: { id: userId },
     });
+
     let Image = null;
+
     if (image) {
       Image = await this.imagesRepository.save({
         ...image,

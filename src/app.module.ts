@@ -5,7 +5,6 @@ import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { BoardModule } from "./apis/boards/boards.module";
-import { AppController } from "./app.controller";
 import { EmailModule } from "./apis/mails/mails.module";
 import { RedisClientOptions } from "redis";
 import * as redisStore from "cache-manager-redis-store";
@@ -22,7 +21,8 @@ import { ReviewCommentsModule } from "./apis/reviewComments/reviewComments.modul
 import { LikeModule } from "./apis/like/like.module";
 import { UserLikeModule } from "./apis/userLike/userLike.module";
 import { AttendListModule } from "./apis/attendList/attendList.module";
-
+import { ReviwesImagesModule } from "./apis/reviewImage/reviewsImages.module";
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
@@ -36,6 +36,7 @@ import { AttendListModule } from "./apis/attendList/attendList.module";
     NestedCommentsModule,
     ReviewBoardsModule,
     ReviewCommentsModule,
+    ReviwesImagesModule,
     PicksModule,
     UsersModule,
     UserLikeModule,
@@ -44,7 +45,11 @@ import { AttendListModule } from "./apis/attendList/attendList.module";
       autoSchemaFile: "src/commons/graphql/schema.gql",
       context: ({ req, res }) => ({ req, res }),
       cors: {
-        origin: ["http://localhost:3000"],
+        origin: [
+          "http://localhost:3000",
+          "https://mydatabase.meonjifather.shop/",
+          "https://meonjifather.shop/",
+        ],
         credentials: true,
         exposedHeaders: ["Set-Cookie", "Cookie"],
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
@@ -72,9 +77,9 @@ import { AttendListModule } from "./apis/attendList/attendList.module";
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
-      url: "redis://my-redis:6379", // 도커 Redis
-      // url: "redis://10.112.81.3:6379", // 쿠버네티스 Redis
+      // url: "redis://10.112.81.3:6379", // 쿠버네티스/ Redis
       isGlobal: true,
+      url: "redis://my-redis:6379", // 도커 Redis
     }),
   ],
   controllers: [AppController],

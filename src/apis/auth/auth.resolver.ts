@@ -48,7 +48,11 @@ export class AuthResolver {
     if (!isAuth)
       throw new UnprocessableEntityException("비밀번호를 확인해 주세요.");
 
-    this.authService.setRefreshToken({ user, res: context.res });
+    this.authService.setRefreshToken({
+      user,
+      req: context.req,
+      res: context.res,
+    });
 
     return this.authService.getAccessToken({ user });
   }

@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { AttendList } from "src/apis/attendList/entities/attendList.entity";
+import { ReviewImage } from "src/apis/reviewImage/entities/reviewImage.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
@@ -9,6 +10,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -41,6 +43,10 @@ export class ReviewBoard {
   @JoinColumn()
   @OneToOne(() => AttendList)
   attendList: AttendList;
+
+  @JoinColumn()
+  @OneToMany(() => ReviewImage, (reviewImage) => reviewImage.reviewBoard)
+  reviewImage: ReviewImage[];
 
   @CreateDateColumn()
   @Field(() => Date)

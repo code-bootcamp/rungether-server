@@ -2,22 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Image {
+  id: String!
+  imgUrl: String
+}
+
 type User {
   id: String!
   email: String!
   nickname: String!
   age: String!
   gender: String!
-  profileUrl: String!
   region: String!
   prefer: String!
   grade: String!
   userLikeCount: Int!
-}
-
-type Image {
-  id: String!
-  imgUrl: String
+  image: Image
 }
 
 type Board {
@@ -56,6 +56,14 @@ type Pick {
   id: String!
   board: Board!
   user: User!
+}
+
+type ReviewImage {
+  id: String!
+  imgUrl: String!
+  isMain: Boolean!
+  deletedAt: DateTime!
+  reviewBoard: ReviewBoard!
 }
 
 type ReviewBoard {
@@ -103,12 +111,14 @@ type Query {
   fetchAllBoards(page: Int): [Board!]!
   fetchAllBoardsWihtPickCount(page: Int): [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
+  serchBoards(word: String!): [Board!]!
   fetchComment(commentId: String!): Comment!
   fetchNestedComment(nestedCommentId: String!): NestedComment!
   fetchReviewBoard(reviewBoardId: String!): ReviewBoard!
+  fetchAllReviewBoards(page: Int): [ReviewBoard!]!
   fetchReviewComments(reviewBoardId: String!, page: Int): [ReviewComment!]!
+  fetchReviewBoardImage(reviewBoardId: String!): [ReviewImage!]!
   fetchMyPick: [Pick!]!
-  checkNickName(nickname: String!): String!
   fetchUsers: [User!]!
 }
 
@@ -134,8 +144,12 @@ type Mutation {
   createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!, attendListId: String!): ReviewBoard!
   deleteReviewBoard(reviewBoardId: String!): String!
   createReviewComment(reviewBoardId: String!, reviewComment: String!): ReviewComment!
+  deleteReviewBoardImage(reviewImageId: String!): ReviewImage!
   pickBoard(boardId: String!): String!
+  checkNickName(nickname: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  deleteUser: Boolean!
   likeUser(userId: String!): String!
 }
 
@@ -185,16 +199,31 @@ input UpdateNestedCommentInput {
 input CreateReviewBoardInput {
   title: String!
   content: String!
+  reviewImage: [String!]!
 }
 
 input CreateUserInput {
   email: String!
   nickname: String!
   password: String!
+  cpassword: String!
   age: String!
   gender: String!
-  profileUrl: String
+  image: String
   region: String!
   prefer: String!
   grade: String!
+}
+
+input UpdateUserInput {
+  email: String
+  nickname: String
+  password: String
+  cpassword: String
+  age: String
+  gender: String
+  image: String
+  region: String
+  prefer: String
+  grade: String
 }
