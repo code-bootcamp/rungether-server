@@ -41,6 +41,13 @@ export class BoardsResolver {
     return this.boardsService.findAllBoardsWithDeleted();
   }
 
+  @Query(() => [Board])
+  serchBoards(
+    @Args("word") word: string //
+  ) {
+    return this.boardsService.serchAllBoards({ word });
+  }
+
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Board)
   async createBoard(

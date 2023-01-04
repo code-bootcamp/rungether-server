@@ -12,13 +12,16 @@ export class CreateUserInput {
   password: string;
 
   @Field()
+  cpassword: string;
+
+  @Field()
   age: string;
 
   @Field()
   gender: string;
 
-  @Field({ nullable: true })
-  profileUrl: string;
+  @Field(() => String, { nullable: true })
+  image: string;
 
   @Field()
   region: string;

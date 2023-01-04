@@ -1,21 +1,31 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { ReviewBoard } from "src/apis/reviewBoards/entities/reviewBoard.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 @ObjectType()
-export class ReviewBoardImage {
+export class ReviewImage {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
   @Column()
   @Field(() => String)
-  imgURL: string;
+  imgUrl: string;
 
   @Column()
   @Field(() => Boolean)
   isMain: boolean;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @ManyToOne(() => ReviewBoard)
   @Field(() => ReviewBoard)

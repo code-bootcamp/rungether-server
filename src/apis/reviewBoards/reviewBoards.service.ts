@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { AttendList } from "../attendList/entities/attendList.entity";
 import { ReviewComment } from "../reviewComments/entities/reviewComment.entity";
+import { ReviewImage } from "../reviewImage/entities/reviewImage.entity";
 import { User } from "../users/entities/user.entity";
 import { ReviewBoard } from "./entities/reviewBoard.entity";
 
@@ -19,17 +20,31 @@ export class ReviewBoardsService {
     private readonly attendListRepository: Repository<AttendList>,
 
     @InjectRepository(ReviewComment)
-    private readonly reviewCommentRepository: Repository<ReviewComment>
+    private readonly reviewCommentRepository: Repository<ReviewComment>,
+
+    @InjectRepository(ReviewImage)
+    private readonly reviewImageRepository: Repository<ReviewImage>
   ) {}
 
   findOne({ reviewBoardId }) {
     return this.reviewBoardsRepository.findOne({
       where: { id: reviewBoardId },
-      relations: ["user", "attendList"],
+      relations: ["user", "attendList", "reviewImage"],
+    });
+  }
+
+  findAll(page) {
+    return this.reviewBoardsRepository.find({
+      relations: ["user", "attendList", "reviewImage"],
+      order: { createdAt: "DESC" },
+      take: 9,
+      skip: page ? (page - 1) * 9 : 0,
     });
   }
 
   async create({ userId, attendListId, createReviewBoardInput }) {
+    const { reviewImage, ...reviewBoard } = createReviewBoardInput;
+    console.log(reviewImage);
     const findReview = await this.reviewBoardsRepository.find({
       where: {
         user: { id: userId },
@@ -37,8 +52,6 @@ export class ReviewBoardsService {
       },
       relations: ["user", "attendList"],
     });
-
-    console.log(findReview);
 
     if (findReview.length !== 0) throw new Error("이미 리뷰가 존재합니다.");
 
@@ -49,12 +62,39 @@ export class ReviewBoardsService {
     const attendList = await this.attendListRepository.findOne({
       where: { id: attendListId },
     });
+    if (!reviewImage) {
+      throw new UnprocessableEntityException("등록된 이미지가 없습니다.");
+    }
 
     const result = await this.reviewBoardsRepository.save({
-      ...createReviewBoardInput,
-      user,
-      attendList,
+      user: { ...user },
+      attendList: { ...attendList },
+      ...reviewBoard,
     });
+
+    const Image = await Promise.all(
+      reviewImage.map((el, i) => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            const newImage = await this.reviewImageRepository.save({
+              imgUrl: el,
+              isMain: i === 0 ? true : false,
+              reviewBoard: { ...result },
+            });
+            resolve(newImage);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      })
+    );
+    console.log(Image);
+
+    // const reusltReviewBoard = await this.reviewBoardsRepository.save({
+    //   ...result,
+    //   reviewImage: { ...Image },
+    // });
+
     return result;
   }
 

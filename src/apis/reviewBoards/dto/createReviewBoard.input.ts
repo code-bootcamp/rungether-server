@@ -7,4 +7,7 @@ export class CreateReviewBoardInput {
 
   @Field(() => String)
   content: string;
+
+  @Field(() => [String])
+  reviewImage: string[];
 }

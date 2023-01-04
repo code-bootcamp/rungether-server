@@ -1,9 +1,12 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Image } from "src/apis/Image/entities/image.entity";
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -27,16 +30,15 @@ export class User {
   password: string;
 
   @Column()
+  cpassword: string;
+
+  @Column()
   @Field()
   age: string;
 
   @Column()
   @Field()
   gender: string;
-
-  @Column({ nullable: true })
-  @Field()
-  profileUrl: string;
 
   @Column()
   @Field()
@@ -62,4 +64,9 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @JoinColumn()
+  @Field(() => Image, { nullable: true })
+  @OneToOne(() => Image, { nullable: true })
+  image: Image;
 }

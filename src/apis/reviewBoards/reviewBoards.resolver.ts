@@ -1,5 +1,5 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
 import { CreateReviewBoardInput } from "./dto/createReviewBoard.input";
@@ -41,5 +41,12 @@ export class ReviewBoardsResolver {
   @Query(() => ReviewBoard)
   fetchReviewBoard(@Args("reviewBoardId") reviewBoardId: string) {
     return this.reviewBoardsService.findOne({ reviewBoardId });
+  }
+
+  @Query(() => [ReviewBoard])
+  fetchAllReviewBoards(
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
+    return this.reviewBoardsService.findAll(page);
   }
 }

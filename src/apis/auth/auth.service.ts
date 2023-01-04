@@ -18,12 +18,33 @@ export class AuthService {
     );
   }
 
-  setRefreshToken({ user, res }: IAuthServiceSetRefreshToken): void {
+  setRefreshToken({ user, res, req }) {
     const refreshToken = this.jwtService.sign(
-      { email: user.email, sub: user.id },
+      { email: user.email, sub: user.id }, //
       { secret: process.env.JWT_REFRESH_KEY, expiresIn: "2w" }
     );
 
-    res.setHeader("set-Cookie", `refreshToken=${refreshToken}`);
+    const permittedOrigins = [
+      "http://localhost:3000/",
+      "https://mydatabase.meonjifather.shop/",
+      "https://meonjifather.shop/",
+    ];
+    const origin = req.headers.origin;
+    if (permittedOrigins.includes(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Headers, Origin, Accept, X-Requested-with, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+    );
+
+    res.setHeader(
+      "Set-Cookie",
+      `refreshToken=${refreshToken}; path=/; domain=.backkim.shop; SameSite=None; Secure; httpOnly`
+    );
+    // res.setHeader('Set-Cookie', refreshToken= ${refreshToken}; path=/;`); 개발환경
+    return refreshToken;
   }
 }

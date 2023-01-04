@@ -10,12 +10,16 @@ import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import * as bcrypt from "bcrypt";
 import { Cache } from "cache-manager";
+import { Image } from "../Image/entities/image.entity";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+
+    @InjectRepository(Image)
+    private readonly imagesRepository: Repository<Image>,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache
@@ -31,12 +35,9 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
-  // async findNickname({ nickname }) {
-  //   return await this.usersRepository.findOne({ where: { nickname } });
-  // }
-
   async createUser({ createUserInput }) {
-    const { email, password, nickname, ...user } = createUserInput;
+    const { email, password, cpassword, nickname, image, ...user } =
+      createUserInput;
 
     const isValid = await this.cacheManager.get(createUserInput.email);
     const checkNickName = await this.usersRepository.findOne({
@@ -51,13 +52,40 @@ export class UsersService {
     if (isValid !== true || !isValid)
       throw new BadRequestException("인증이 완료되지 않았습니다.");
 
+    if (createUserInput.password !== createUserInput.cpassword) {
+      throw new NotFoundException("비밀번호가 일치하지 않습니다.");
+    }
+
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
+    const hashedCPassword = await bcrypt.hash(createUserInput.cpassword, 10);
+
+    let Image = null;
+
+    if (image) {
+      Image = await this.imagesRepository.save({
+        ...image,
+      });
+    }
 
     const result = this.usersRepository.save({
       ...createUserInput,
+      image: Image,
       password: hashedPassword,
+      cpassword: hashedCPassword,
     });
 
     return result;
+  }
+
+  async update({ userId, updateUserInput }) {
+    return await this.usersRepository.save({
+      ...userId,
+      ...updateUserInput,
+    });
+  }
+
+  async delete({ userId }) {
+    const result = await this.usersRepository.softDelete({ id: userId });
+    return result.affected ? true : false;
   }
 }

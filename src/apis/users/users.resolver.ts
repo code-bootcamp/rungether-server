@@ -1,6 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { Args, Mutation, Query } from "@nestjs/graphql";
+import { Injectable, UseGuards } from "@nestjs/common";
+import { Args, Context, Mutation, Query } from "@nestjs/graphql";
+import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
+import { IContext } from "src/commons/type/context";
 import { CreateUserInput } from "./dto/create-user.input";
+import { UpdateUserInput } from "./dto/update-board.input";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
 
@@ -10,7 +13,7 @@ export class UsersResolver {
     private readonly usersService: UsersService //
   ) {}
 
-  @Query(() => String)
+  @Mutation(() => String)
   async checkNickName(
     @Args("nickname") nickname: string //
   ) {
@@ -20,6 +23,11 @@ export class UsersResolver {
     } else return true;
   }
 
+  @Query(() => [User])
+  fetchUsers(): Promise<User[]> {
+    return this.usersService.findAll();
+  }
+
   @Mutation(() => User)
   createUser(
     @Args("createUserInput") createUserInput: CreateUserInput //
@@ -27,8 +35,23 @@ export class UsersResolver {
     return this.usersService.createUser({ createUserInput });
   }
 
-  @Query(() => [User])
-  fetchUsers(): Promise<User[]> {
-    return this.usersService.findAll();
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User)
+  async updateUser(
+    @Context() context: IContext, //
+    @Args("updateUserInput") updateUserInput: UpdateUserInput
+  ) {
+    const userId = context.req.user.id;
+
+    return this.usersService.update({ userId, updateUserInput });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean)
+  deleteUser(
+    @Context() context: IContext //
+  ) {
+    const userId = context.req.user.id;
+    return this.usersService.delete({ userId });
   }
 }
