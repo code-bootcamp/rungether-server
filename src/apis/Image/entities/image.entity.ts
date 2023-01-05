@@ -16,7 +16,7 @@ export class Image {
   id: string;
 
   @Column()
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   imgUrl: string;
 
   @DeleteDateColumn()

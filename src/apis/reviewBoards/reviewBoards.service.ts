@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  UnprocessableEntityException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { AttendList } from "../attendList/entities/attendList.entity";
@@ -62,6 +66,7 @@ export class ReviewBoardsService {
     const attendList = await this.attendListRepository.findOne({
       where: { id: attendListId },
     });
+
     if (!reviewImage) {
       throw new UnprocessableEntityException("등록된 이미지가 없습니다.");
     }
@@ -72,7 +77,7 @@ export class ReviewBoardsService {
       ...reviewBoard,
     });
 
-    const Image = await Promise.all(
+    await Promise.all(
       reviewImage.map((el, i) => {
         return new Promise(async (resolve, reject) => {
           try {
@@ -88,12 +93,55 @@ export class ReviewBoardsService {
         });
       })
     );
-    console.log(Image);
 
-    // const reusltReviewBoard = await this.reviewBoardsRepository.save({
-    //   ...result,
-    //   reviewImage: { ...Image },
-    // });
+    return result;
+  }
+
+  async update({ reviewBoardId, userId, updateReviewBoardInput }) {
+    const { reviewImage, ...reviewBoard } = updateReviewBoardInput;
+
+    const findReviewBoard = await this.reviewBoardsRepository.findOne({
+      where: { id: reviewBoardId },
+      relations: ["user", "reviewImage"],
+    });
+
+    if (userId !== findReviewBoard.user.id) {
+      throw new ConflictException("수정 권한이 없습니다");
+    }
+
+    if (!reviewImage) {
+      throw new UnprocessableEntityException(
+        "리뷰 게시글에는 최소 하나의 이미지가 필요합니다."
+      );
+    }
+
+    const result = await this.reviewBoardsRepository.save({
+      ...findReviewBoard,
+      ...reviewBoard,
+    });
+
+    if (reviewImage) {
+      await this.reviewImageRepository.delete({
+        reviewBoard: { id: reviewBoardId },
+      });
+
+      await Promise.all(
+        reviewImage.map((el, i) => {
+          return new Promise(async (resolve, reject) => {
+            try {
+              const newImage = await this.reviewImageRepository.save({
+                imgUrl: el,
+                isMain: i === 0 ? true : false,
+                reviewBoard: { ...result },
+              });
+              resolve(newImage);
+            } catch (error) {
+              reject(error);
+            }
+          });
+        })
+      );
+    }
 
     return result;
   }
@@ -105,6 +153,10 @@ export class ReviewBoardsService {
     });
 
     if (userId !== reviewBoard.user.id) throw new Error("권한이 없습니다.");
+
+    this.reviewImageRepository.delete({
+      reviewBoard: { id: reviewBoardId },
+    });
 
     this.reviewCommentRepository.delete({
       reviewBoard: { id: reviewBoardId },

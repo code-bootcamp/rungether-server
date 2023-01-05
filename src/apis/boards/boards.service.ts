@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  UnprocessableEntityException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from "typeorm";
 import { Image } from "../Image/entities/image.entity";
@@ -40,7 +44,7 @@ export class BoardsService {
     });
   }
 
-  findAllWhitPickCount(page) {
+  findAllWithPickCount(page) {
     return this.boardsRepository.find({
       relations: ["user", "image"],
       order: { pickCount: "DESC" },
@@ -73,7 +77,7 @@ export class BoardsService {
 
     if (image) {
       Image = await this.imagesRepository.save({
-        ...image,
+        imgUrl: image,
       });
     }
 
@@ -94,30 +98,32 @@ export class BoardsService {
   async update({ boardId, userId, updateBoardInput }) {
     const { image, ...board } = updateBoardInput;
 
-    const Board = await this.findOneById({ boardId });
-
-    const Image = await this.imagesRepository.save({
-      ...image,
-    });
-
-    const User = await this.usersRepository.findOne({
+    const findUser = await this.usersRepository.findOne({
       where: { id: userId },
+      relations: ["image"],
     });
 
-    if (!Board) {
-      throw new UnprocessableEntityException("존재하지 않는 게시글 입니다!");
+    const findBoard = await this.boardsRepository.findOne({
+      where: { id: boardId },
+      relations: ["user", "image"],
+    });
+
+    if (userId !== findUser.id) {
+      throw new ConflictException("수정 권한이 없습니다.");
     }
 
-    if (userId !== Board.user.id) {
-      throw new UnprocessableEntityException("게시글 수정 권한이 없습니다!");
+    let Image = {};
+
+    if (image) {
+      await this.imagesRepository.softDelete({ id: findBoard.image.id });
+      Image = await this.imagesRepository.save({ imgUrl: image });
     }
 
-    return this.boardsRepository.save({
-      ...Board,
-      ...updateBoardInput,
-      image: Image,
-      id: boardId,
-      user: { ...User },
+    return await this.boardsRepository.save({
+      ...findBoard,
+      ...board,
+      user: findUser,
+      image: { ...Image },
     });
   }
 

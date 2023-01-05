@@ -18,7 +18,7 @@ export class AuthService {
     );
   }
 
-  setRefreshToken({ user, res, req }) {
+  setRefreshToken({ user, res, req }: IAuthServiceSetRefreshToken): string {
     const refreshToken = this.jwtService.sign(
       { email: user.email, sub: user.id }, //
       { secret: process.env.JWT_REFRESH_KEY, expiresIn: "2w" }

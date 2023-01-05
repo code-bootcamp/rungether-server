@@ -53,6 +53,10 @@ export class Board {
   @Field(() => String)
   recruitSports: string;
 
+  @Column()
+  @Field(() => Int)
+  recruitPeople: number;
+
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;

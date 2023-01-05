@@ -18,10 +18,23 @@ export class ReviewsImagesResolver {
     return this.reviewsImagesService.findOneById({ reviewBoardId });
   }
 
+  @Query(() => [ReviewImage])
+  fetchAllReviewBoardImages() {
+    return this.reviewsImagesService.findAll();
+  }
+
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => ReviewImage)
+  @Mutation(() => Boolean)
   deleteReviewBoardImage(
     @Context() context: IContext, //
-    @Args("reviewImageId") reviewImage: string
-  ) {}
+    @Args("reviewImageId") reviewImageId: string,
+    @Args("reviewBoardId") reviewBoardId: string
+  ) {
+    const userId = context.req.user.id;
+    return this.reviewsImagesService.delete({
+      reviewImageId,
+      reviewBoardId,
+      userId,
+    });
+  }
 }

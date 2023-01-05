@@ -4,7 +4,7 @@
 
 type Image {
   id: String!
-  imgUrl: String
+  imgUrl: String!
 }
 
 type User {
@@ -30,6 +30,7 @@ type Board {
   recruitRegion: String!
   recruitGrade: String!
   recruitSports: String!
+  recruitPeople: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime!
@@ -109,7 +110,7 @@ type Query {
   fetchAttendList: [AttendList!]!
   fetchBoard(boardId: String!): Board!
   fetchAllBoards(page: Int): [Board!]!
-  fetchAllBoardsWihtPickCount(page: Int): [Board!]!
+  fetchAllBoardsWithPickCount(page: Int): [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
   serchBoards(word: String!): [Board!]!
   fetchComment(commentId: String!): Comment!
@@ -118,6 +119,7 @@ type Query {
   fetchAllReviewBoards(page: Int): [ReviewBoard!]!
   fetchReviewComments(reviewBoardId: String!, page: Int): [ReviewComment!]!
   fetchReviewBoardImage(reviewBoardId: String!): [ReviewImage!]!
+  fetchAllReviewBoardImages: [ReviewImage!]!
   fetchMyPick: [Pick!]!
   fetchUsers: [User!]!
 }
@@ -142,9 +144,10 @@ type Mutation {
   deleteNestedComment(nestedCommentId: String!): Boolean!
   updateNestedComment(nestedCommentId: String!, UpdateNestedCommentInput: UpdateNestedCommentInput!): NestedComment!
   createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!, attendListId: String!): ReviewBoard!
-  deleteReviewBoard(reviewBoardId: String!): String!
+  updateReviewBoard(reviewBoardId: String!, updateReviewBoardInput: UpdateReviewBoardInput!): ReviewBoard!
+  deleteReviewBoard(reviewBoardId: String!): Boolean!
   createReviewComment(reviewBoardId: String!, reviewComment: String!): ReviewComment!
-  deleteReviewBoardImage(reviewImageId: String!): ReviewImage!
+  deleteReviewBoardImage(reviewImageId: String!, reviewBoardId: String!): Boolean!
   pickBoard(boardId: String!): String!
   checkNickName(nickname: String!): String!
   createUser(createUserInput: CreateUserInput!): User!
@@ -160,6 +163,7 @@ input CreateBoardInput {
   recruitRegion: String!
   recruitGrade: String!
   recruitSports: String!
+  recruitPeople: Int!
   image: String
 }
 
@@ -170,6 +174,7 @@ input UpdateBoardInput {
   recruitRegion: String
   recruitGrade: String
   recruitSports: String
+  recruitPeople: Int
   image: String
 }
 
@@ -202,6 +207,12 @@ input CreateReviewBoardInput {
   reviewImage: [String!]!
 }
 
+input UpdateReviewBoardInput {
+  title: String
+  content: String
+  reviewImage: [String!]
+}
+
 input CreateUserInput {
   email: String!
   nickname: String!
@@ -216,10 +227,7 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  email: String
   nickname: String
-  password: String
-  cpassword: String
   age: String
   gender: String
   image: String
