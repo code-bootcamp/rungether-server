@@ -6,7 +6,6 @@ import { IContext } from "src/commons/type/context";
 import { Repository } from "typeorm";
 import { Board } from "../boards/entities/board.entity";
 import { User } from "../users/entities/user.entity";
-import { UsersService } from "../users/users.service";
 import { AttendListService } from "./attendList.service";
 import { AttendList } from "./entities/attendList.entity";
 
@@ -23,7 +22,7 @@ export class AttendListResolver {
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => AttendList)
+  @Mutation(() => String)
   async attendList(
     @Context() context: IContext,
     @Args("boardId") boardId: string
@@ -42,8 +41,14 @@ export class AttendListResolver {
       userId,
       boardId,
     });
+
     if (checkDuplicate.length !== 0) {
-      throw new Error("이미 신청한 게시글 입니다.");
+      await this.boardRepository.update(
+        { id: boardId },
+        { attendCount: board.attendCount - 1 }
+      );
+      await this.attendListService.delete({ user, board });
+      return "참가 취소";
     }
 
     await this.boardRepository.update(
@@ -51,7 +56,9 @@ export class AttendListResolver {
       { attendCount: board.attendCount + 1 }
     );
 
-    return this.attendListService.create({ user, board });
+    this.attendListService.create({ user, board });
+
+    return "참가 완료";
   }
 
   @UseGuards(GqlAuthAccessGuard)

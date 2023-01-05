@@ -1,10 +1,16 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { User } from "src/apis/users/entities/user.entity";
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
 @ObjectType()
-export class UserLike {
+export class Follow {
   @PrimaryGeneratedColumn("uuid")
   @Field()
   id: string;
@@ -16,4 +22,10 @@ export class UserLike {
   @Field(() => User)
   @ManyToOne(() => User)
   user2: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -47,8 +47,4 @@ export class AttendList {
   @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  @Field(() => Date)
-  deletedAt: Date;
 }
