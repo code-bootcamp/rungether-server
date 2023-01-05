@@ -18,8 +18,50 @@ export class AttendListService {
     private readonly boardRepository: Repository<Board>
   ) {}
 
+  async enterAttendList({ context, boardId }) {
+    const userId = context.req.user.id;
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+      relations: ["user"],
+    });
+
+    const checkDuplicate = await this.findUserList({
+      userId,
+      boardId,
+    });
+
+    if (checkDuplicate.length !== 0) {
+      await this.boardRepository.update(
+        { id: boardId },
+        { attendCount: board.attendCount - 1 }
+      );
+      await this.delete({ user, board });
+      return "참가 취소";
+    }
+
+    await this.boardRepository.update(
+      { id: boardId },
+      { attendCount: board.attendCount + 1 }
+    );
+
+    this.create({ user, board });
+
+    return "참가 완료";
+  }
+
   async create({ user, board }) {
     return await this.attendListRepository.save({
+      user,
+      board,
+    });
+  }
+
+  async delete({ user, board }) {
+    return await this.attendListRepository.delete({
       user,
       board,
     });
@@ -40,7 +82,6 @@ export class AttendListService {
       relations: ["user", "board"],
     });
 
-    console.log(result);
     return result;
   }
 }

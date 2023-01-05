@@ -28,6 +28,15 @@ export class UsersResolver {
     return this.usersService.findAll();
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => User)
+  fetchUserLoggedIn(
+    @Context() context: IContext //
+  ) {
+    const userId = context.req.user.id;
+    return this.usersService.findMe({ userId });
+  }
+
   @Mutation(() => User)
   createUser(
     @Args("createUserInput") createUserInput: CreateUserInput //
@@ -54,4 +63,8 @@ export class UsersResolver {
     const userId = context.req.user.id;
     return this.usersService.delete({ userId });
   }
+
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => String)
+  // tempPassword(@Context() context: IContext) {}
 }

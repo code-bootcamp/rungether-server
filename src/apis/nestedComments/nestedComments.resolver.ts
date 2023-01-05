@@ -1,40 +1,37 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
-import { Repository } from "typeorm";
-import { CreateNestedCommentInput } from "./dto/createNestedComment.input";
-import { UpdateNestedCommentInput } from "./dto/updateNestedComment.input";
 import { NestedComment } from "./entity/nestedComment.entity";
 import { NestedCommentsService } from "./nestedComments.service";
 
 @Resolver()
 export class NestedCommentsResolver {
   constructor(
-    private readonly nestedCommentsService: NestedCommentsService,
-
-    @InjectRepository(NestedComment)
-    private readonly nestedCommentRepository: Repository<NestedComment>
+    private readonly nestedCommentsService: NestedCommentsService //
   ) {}
+
+  @Query(() => [NestedComment])
+  fetchNestedComments(
+    @Args("commentId") commentId: string, //
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
+    return this.nestedCommentsService.findAll({ commentId, page });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => NestedComment)
   createNestedComment(
-    @Context() context: IContext,
-    @Args("createNestedCommentInput")
-    createNestedCommentInput: CreateNestedCommentInput
+    @Args("commentId") commentId: string, //
+    @Args("nestedComment") nestedComment: string,
+    @Context() context: IContext
   ) {
     const user = context.req.user.id;
     return this.nestedCommentsService.create({
-      createNestedCommentInput,
       user,
+      commentId,
+      nestedComment,
     });
-  }
-
-  @Query(() => NestedComment)
-  fetchNestedComment(@Args("nestedCommentId") nestedCommentId: string) {
-    return this.nestedCommentsService.findOne({ nestedCommentId });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -42,7 +39,7 @@ export class NestedCommentsResolver {
   deleteNestedComment(
     @Context() context: IContext,
     @Args("nestedCommentId") nestedCommentId: string
-  ): Promise<boolean> {
+  ) {
     const user = context.req.user.id;
     return this.nestedCommentsService.delete({ nestedCommentId, user });
   }
@@ -52,14 +49,13 @@ export class NestedCommentsResolver {
   async updateNestedComment(
     @Context() context: IContext,
     @Args("nestedCommentId") nestedCommentId: string,
-    @Args("UpdateNestedCommentInput")
-    updateNestedCommentInput: UpdateNestedCommentInput
-  ): Promise<NestedComment> {
+    @Args("updateNestedComment") updateNestedComment: string
+  ) {
     const user = context.req.user.id;
 
     return this.nestedCommentsService.update({
       nestedCommentId,
-      updateNestedCommentInput,
+      updateNestedComment,
       user,
     });
   }

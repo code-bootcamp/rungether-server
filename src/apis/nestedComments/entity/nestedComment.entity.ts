@@ -21,7 +21,7 @@ export class NestedComment {
 
   @Column()
   @Field(() => String)
-  content: string;
+  nestedComment: string;
 
   @CreateDateColumn()
   @Field(() => Date)
@@ -35,12 +35,10 @@ export class NestedComment {
   @Field(() => Date)
   deletedAt: Date;
 
-  @JoinTable()
   @ManyToOne(() => Comment)
   @Field(() => Comment)
   comment: Comment;
 
-  @JoinTable()
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;

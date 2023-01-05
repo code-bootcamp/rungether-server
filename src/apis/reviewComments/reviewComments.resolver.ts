@@ -33,4 +33,30 @@ export class ReviewCommentsResolver {
       reviewComment,
     });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean)
+  deleteReviewComment(
+    @Context() context: IContext,
+    @Args("reviewCommentId") reviewCommentId: string
+  ) {
+    const user = context.req.user.id;
+    return this.reviewCommentsService.delete({ reviewCommentId, user });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => ReviewComment)
+  async updateReviewComment(
+    @Context() context: IContext,
+    @Args("reviewCommentId") reviewCommentId: string,
+    @Args("updateReviewComment") updateReviewComment: string
+  ) {
+    const user = context.req.user.id;
+
+    return this.reviewCommentsService.update({
+      reviewCommentId,
+      updateReviewComment,
+      user,
+    });
+  }
 }

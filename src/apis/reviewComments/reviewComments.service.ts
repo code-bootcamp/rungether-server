@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ReviewBoard } from "../reviewBoards/entities/reviewBoard.entity";
@@ -39,8 +39,48 @@ export class ReviewCommentsService {
 
     return await this.reviewCommentRepository.save({
       reviewComment,
-      reviewBoard: { id: findId.id },
-      user: { id: findUser.id },
+      reviewBoard: findId,
+      user: findUser,
+    });
+  }
+
+  async delete({ reviewCommentId, user }) {
+    const findUser = await this.userRepository.findOne({
+      where: { id: user },
+    });
+
+    const findReviewComment = await this.reviewCommentRepository.findOne({
+      where: { id: reviewCommentId },
+      relations: ["user", "reviewBoard"],
+    });
+
+    if (findUser.id !== findReviewComment.user.id)
+      throw new ConflictException("권한이 없습니다.");
+
+    const result = await this.reviewCommentRepository.softDelete({
+      id: reviewCommentId,
+    });
+
+    return result.affected ? true : false;
+  }
+
+  async update({ reviewCommentId, updateReviewComment, user }) {
+    const findUser = await this.userRepository.findOne({
+      where: { id: user },
+    });
+
+    const findReviewComment = await this.reviewCommentRepository.findOne({
+      where: { id: reviewCommentId },
+      relations: ["user", "reviewBoard"],
+    });
+
+    if (user !== findReviewComment.user.id)
+      throw new ConflictException("권한이 없습니다.");
+
+    return await this.reviewCommentRepository.save({
+      ...findReviewComment,
+      user: findUser,
+      reviewComment: updateReviewComment,
     });
   }
 }

@@ -32,6 +32,11 @@ export class UsersService {
     });
   }
 
+  async findMe({ userId }) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    return user;
+  }
+
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
@@ -58,7 +63,6 @@ export class UsersService {
     }
 
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
-    const hashedCPassword = await bcrypt.hash(createUserInput.cpassword, 10);
 
     let Image = null;
 
@@ -72,7 +76,6 @@ export class UsersService {
       ...createUserInput,
       image: Image,
       password: hashedPassword,
-      cpassword: hashedCPassword,
     });
 
     return result;

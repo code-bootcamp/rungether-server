@@ -30,9 +30,6 @@ export class User {
   password: string;
 
   @Column()
-  cpassword: string;
-
-  @Column()
   @Field()
   age: string;
 
@@ -51,10 +48,6 @@ export class User {
   @Column()
   @Field()
   grade: string;
-
-  @Column({ default: 0 })
-  @Field(() => Int)
-  userLikeCount: number;
 
   @CreateDateColumn()
   createdAt: Date;
