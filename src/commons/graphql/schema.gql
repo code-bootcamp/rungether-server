@@ -16,7 +16,6 @@ type User {
   region: String!
   prefer: String!
   grade: String!
-  userLikeCount: Int!
   image: Image
 }
 
@@ -104,6 +103,16 @@ type ReviewComment {
   reviewBoard: ReviewBoard!
 }
 
+type FollowerList {
+  id: String!
+  user2: User!
+}
+
+type FollowingList {
+  id: String!
+  user2: User!
+}
+
 type Query {
   fetchAttendList: [AttendList!]!
   fetchBoard(boardId: String!): Board!
@@ -112,6 +121,8 @@ type Query {
   fetchAllBoardsWithDelete: [Board!]!
   serchBoards(word: String!): [Board!]!
   fetchComment(commentId: String!): Comment!
+  fetchFollower(userId: String!): [FollowerList!]!
+  fetchFollowing(userId: String!): [FollowingList!]!
   fetchNestedComment(nestedCommentId: String!): NestedComment!
   fetchReviewBoard(reviewBoardId: String!): ReviewBoard!
   fetchAllReviewBoards(page: Int): [ReviewBoard!]!
@@ -119,7 +130,7 @@ type Query {
   fetchReviewBoardImage(reviewBoardId: String!): [ReviewImage!]!
   fetchMyPick: [Pick!]!
   fetchUsers: [User!]!
-  fetchMyInfo: User!
+  fetchUserLoggedIn: User!
 }
 
 type Mutation {
@@ -137,6 +148,7 @@ type Mutation {
   checkTokenEmail(email: String!, token: String!): String!
   uploadFile(file: Upload!): String!
   uploadFiles(files: [Upload!]!): [String!]!
+  followUser(userId: String!): String!
   likeReviewBoard(reviewBoardId: String!): String!
   createNestedComment(createNestedCommentInput: CreateNestedCommentInput!): NestedComment!
   deleteNestedComment(nestedCommentId: String!): Boolean!
@@ -150,6 +162,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser: Boolean!
+  temporaryPassword: String!
 }
 
 input CreateBoardInput {

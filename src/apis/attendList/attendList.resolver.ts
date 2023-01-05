@@ -11,15 +11,7 @@ import { AttendList } from "./entities/attendList.entity";
 
 @Resolver()
 export class AttendListResolver {
-  constructor(
-    private readonly attendListService: AttendListService,
-
-    @InjectRepository(Board)
-    private readonly boardRepository: Repository<Board>,
-
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>
-  ) {}
+  constructor(private readonly attendListService: AttendListService) {}
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => String)
@@ -27,38 +19,7 @@ export class AttendListResolver {
     @Context() context: IContext,
     @Args("boardId") boardId: string
   ) {
-    const userId = context.req.user.id;
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
-
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
-      relations: ["user"],
-    });
-
-    const checkDuplicate = await this.attendListService.findUserList({
-      userId,
-      boardId,
-    });
-
-    if (checkDuplicate.length !== 0) {
-      await this.boardRepository.update(
-        { id: boardId },
-        { attendCount: board.attendCount - 1 }
-      );
-      await this.attendListService.delete({ user, board });
-      return "참가 취소";
-    }
-
-    await this.boardRepository.update(
-      { id: boardId },
-      { attendCount: board.attendCount + 1 }
-    );
-
-    this.attendListService.create({ user, board });
-
-    return "참가 완료";
+    return this.attendListService.enterAttendList({ context, boardId });
   }
 
   @UseGuards(GqlAuthAccessGuard)

@@ -30,7 +30,7 @@ export class UsersResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
-  fetchMyInfo(
+  fetchUserLoggedIn(
     @Context() context: IContext //
   ) {
     const userId = context.req.user.id;
@@ -63,4 +63,8 @@ export class UsersResolver {
     const userId = context.req.user.id;
     return this.usersService.delete({ userId });
   }
+
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => String)
+  // tempPassword(@Context() context: IContext) {}
 }
