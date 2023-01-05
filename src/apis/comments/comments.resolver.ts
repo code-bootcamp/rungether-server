@@ -1,36 +1,37 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
-import { Repository } from "typeorm";
 import { CommentsService } from "./comments.service";
-import { CreateCommentInput } from "./dto/createComment.input";
-import { UpdateCommentInput } from "./dto/updateComment.input";
 import { Comment } from "./entity/comment.entity";
 
 @Resolver()
 export class CommentsResolver {
   constructor(
-    private readonly commentsService: CommentsService,
-
-    @InjectRepository(Comment)
-    private readonly commentRepository: Repository<Comment>
+    private readonly commentsService: CommentsService //
   ) {}
+
+  @Query(() => [Comment])
+  fetchComments(
+    @Args("boardId") boardId: string, //
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
+    return this.commentsService.findAll({ boardId, page });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Comment)
   createComment(
-    @Context() context: IContext,
-    @Args("createCommentInput") createCommentInput: CreateCommentInput
+    @Args("boardId") boardId: string, //
+    @Args("comment") comment: string,
+    @Context() context: IContext
   ) {
     const user = context.req.user.id;
-    return this.commentsService.create({ createCommentInput, user });
-  }
-
-  @Query(() => Comment)
-  fetchComment(@Args("commentId") commentId: string) {
-    return this.commentsService.findOne({ commentId });
+    return this.commentsService.create({
+      user,
+      boardId,
+      comment,
+    });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -38,7 +39,7 @@ export class CommentsResolver {
   deleteComment(
     @Context() context: IContext,
     @Args("commentId") commentId: string
-  ): Promise<boolean> {
+  ) {
     const user = context.req.user.id;
     return this.commentsService.delete({ commentId, user });
   }
@@ -48,10 +49,14 @@ export class CommentsResolver {
   async updateComment(
     @Context() context: IContext,
     @Args("commentId") commentId: string,
-    @Args("UpdateCommentInput") updateCommentInput: UpdateCommentInput
-  ): Promise<Comment> {
+    @Args("updateComment") updateComment: string
+  ) {
     const user = context.req.user.id;
 
-    return this.commentsService.update({ commentId, updateCommentInput, user });
+    return this.commentsService.update({
+      commentId,
+      updateComment,
+      user,
+    });
   }
 }

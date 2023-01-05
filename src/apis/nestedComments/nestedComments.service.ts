@@ -4,11 +4,6 @@ import { Repository } from "typeorm";
 import { Comment } from "../comments/entity/comment.entity";
 import { User } from "../users/entities/user.entity";
 import { NestedComment } from "./entity/nestedComment.entity";
-import {
-  ICreateNestedCommentInput,
-  INestedCommentServiceDelete,
-  INestedCommentServiceUpdate,
-} from "./interface/nestedComment.service.interface";
 
 @Injectable()
 export class NestedCommentsService {
@@ -23,33 +18,33 @@ export class NestedCommentsService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  async create({ createNestedCommentInput, user }: ICreateNestedCommentInput) {
-    const { commentId, content } = createNestedCommentInput;
-    const findComment = await this.commentRepository.findOne({
+  async findAll({ commentId, page }) {
+    return await this.nestedCommentRepository.find({
+      where: { comment: { id: commentId } },
+      relations: ["board", "user"],
+      order: { createdAt: "ASC" },
+      take: 9,
+      skip: page ? (page - 1) * 9 : 0,
+    });
+  }
+
+  async create({ user, commentId, nestedComment }) {
+    const findId = await this.commentRepository.findOne({
       where: { id: commentId },
     });
+
     const findUser = await this.userRepository.findOne({
       where: { id: user },
     });
-    const result = await this.nestedCommentRepository.save({
-      content,
+
+    return await this.nestedCommentRepository.save({
+      nestedComment,
+      comment: findId,
       user: findUser,
-      comment: findComment,
-    });
-    return result;
-  }
-
-  findOne({ nestedCommentId }) {
-    return this.commentRepository.findOne({
-      where: { id: nestedCommentId },
-      relations: ["user", "comment"],
     });
   }
 
-  async delete({
-    nestedCommentId,
-    user,
-  }: INestedCommentServiceDelete): Promise<boolean> {
+  async delete({ nestedCommentId, user }) {
     const findUser = await this.userRepository.findOne({
       where: { id: user },
     });
@@ -65,18 +60,14 @@ export class NestedCommentsService {
     const result = await this.nestedCommentRepository.softDelete({
       id: nestedCommentId,
     });
-
     return result.affected ? true : false;
   }
 
-  async update({
-    nestedCommentId,
-    updateNestedCommentInput,
-    user,
-  }: INestedCommentServiceUpdate): Promise<NestedComment> {
-    const findUser = await this.nestedCommentRepository.findOne({
+  async update({ nestedCommentId, updateNestedComment, user }) {
+    const findUser = await this.userRepository.findOne({
       where: { id: user },
     });
+
     const findNestedComment = await this.nestedCommentRepository.findOne({
       where: { id: nestedCommentId },
       relations: ["user", "comment"],
@@ -88,7 +79,7 @@ export class NestedCommentsService {
     return await this.nestedCommentRepository.save({
       ...findNestedComment,
       user: findUser,
-      ...updateNestedCommentInput,
+      comment: updateNestedComment,
     });
   }
 }
