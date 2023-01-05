@@ -28,6 +28,15 @@ export class UsersResolver {
     return this.usersService.findAll();
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => User)
+  fetchMyInfo(
+    @Context() context: IContext //
+  ) {
+    const userId = context.req.user.id;
+    return this.usersService.findMe({ userId });
+  }
+
   @Mutation(() => User)
   createUser(
     @Args("createUserInput") createUserInput: CreateUserInput //

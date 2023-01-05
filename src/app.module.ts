@@ -19,10 +19,10 @@ import { JwtRefreshStrategy } from "./commons/auth/jwt-refresh.strategy";
 import { ReviewBoardsModule } from "./apis/reviewBoards/reviewBoards.module";
 import { ReviewCommentsModule } from "./apis/reviewComments/reviewComments.module";
 import { LikeModule } from "./apis/like/like.module";
-import { UserLikeModule } from "./apis/userLike/userLike.module";
 import { AttendListModule } from "./apis/attendList/attendList.module";
 import { ReviwesImagesModule } from "./apis/reviewImage/reviewsImages.module";
 import { AppController } from "./app.controller";
+import { FollowModule } from "./apis/follow/follow.module";
 
 @Module({
   imports: [
@@ -32,6 +32,7 @@ import { AppController } from "./app.controller";
     CommentsModule,
     EmailModule,
     FilesModule,
+    FollowModule,
     LikeModule,
     NestedCommentsModule,
     ReviewBoardsModule,
@@ -39,7 +40,6 @@ import { AppController } from "./app.controller";
     ReviwesImagesModule,
     PicksModule,
     UsersModule,
-    UserLikeModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: "src/commons/graphql/schema.gql",

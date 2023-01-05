@@ -25,6 +25,13 @@ export class AttendListService {
     });
   }
 
+  async delete({ user, board }) {
+    return await this.attendListRepository.delete({
+      user,
+      board,
+    });
+  }
+
   async findUserList({ userId, boardId }) {
     return await this.attendListRepository.find({
       where: {
@@ -40,7 +47,6 @@ export class AttendListService {
       relations: ["user", "board"],
     });
 
-    console.log(result);
     return result;
   }
 }

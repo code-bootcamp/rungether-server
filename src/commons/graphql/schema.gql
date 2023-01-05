@@ -83,7 +83,6 @@ type AttendList {
   board: Board!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime!
 }
 
 type NestedComment {
@@ -120,10 +119,11 @@ type Query {
   fetchReviewBoardImage(reviewBoardId: String!): [ReviewImage!]!
   fetchMyPick: [Pick!]!
   fetchUsers: [User!]!
+  fetchMyInfo: User!
 }
 
 type Mutation {
-  attendList(boardId: String!): AttendList!
+  attendList(boardId: String!): String!
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
   logout: String!
@@ -150,7 +150,6 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser: Boolean!
-  likeUser(userId: String!): String!
 }
 
 input CreateBoardInput {
