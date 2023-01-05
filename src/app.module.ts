@@ -77,9 +77,9 @@ import { FollowModule } from "./apis/follow/follow.module";
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
-      // url: "redis://10.112.81.3:6379", // 쿠버네티스/ Redis
-      isGlobal: true,
       url: "redis://my-redis:6379", // 도커 Redis
+      isGlobal: true,
+      // url: "redis://10.112.81.3:6379", // 쿠버네티스/ Redis
     }),
   ],
   controllers: [AppController],

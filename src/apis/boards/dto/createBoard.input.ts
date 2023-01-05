@@ -20,6 +20,9 @@ export class CreateBoardInput {
   @Field(() => String)
   recruitSports: string;
 
+  @Field(() => Int)
+  recruitPeople: number;
+
   @Field(() => String, { nullable: true })
   image: string;
 }

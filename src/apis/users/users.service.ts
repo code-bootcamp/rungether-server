@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   CACHE_MANAGER,
+  ConflictException,
   Inject,
   Injectable,
   NotFoundException,
@@ -67,7 +68,7 @@ export class UsersService {
 
     if (image) {
       Image = await this.imagesRepository.save({
-        ...image,
+        imgUrl: image,
       });
     }
 
@@ -81,9 +82,28 @@ export class UsersService {
   }
 
   async update({ userId, updateUserInput }) {
+    const { image, ...user } = updateUserInput;
+
+    const findUser = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ["image"],
+    });
+
+    if (userId !== findUser.id) {
+      throw new ConflictException("수정 권한이 없습니다.");
+    }
+
+    let Image = {};
+
+    if (image) {
+      await this.imagesRepository.softDelete({ id: findUser.image.id });
+      Image = await this.imagesRepository.save({ imgUrl: image });
+    }
+
     return await this.usersRepository.save({
-      ...userId,
-      ...updateUserInput,
+      ...findUser,
+      ...user,
+      image: { ...Image },
     });
   }
 

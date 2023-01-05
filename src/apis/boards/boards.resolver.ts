@@ -30,10 +30,10 @@ export class BoardsResolver {
   }
 
   @Query(() => [Board])
-  fetchAllBoardsWihtPickCount(
+  fetchAllBoardsWithPickCount(
     @Args("page", { nullable: true, type: () => Int }) page: number
   ) {
-    return this.boardsService.findAllWhitPickCount(page);
+    return this.boardsService.findAllWithPickCount(page);
   }
 
   @Query(() => [Board])
