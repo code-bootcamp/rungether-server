@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FollowCount } from "../followCounts/followCount.entity";
@@ -19,6 +19,14 @@ export class FollowService {
   ) {}
 
   async follow({ fromUserId, userId }) {
+    if (fromUserId === userId) throw new BadRequestException();
+
+    const existUser = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!existUser) throw new BadRequestException("존재하지 않는 유저 입니다.");
+
     const followingUserCount = await this.followCountRepository.findOne({
       where: { user: { id: fromUserId } },
     });
