@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Board } from "src/apis/boards/entities/board.entity";
+import { ReviewComment } from "src/apis/reviewComments/entities/reviewComment.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
@@ -10,20 +10,20 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-@ObjectType()
 @Entity()
-export class Comment {
+@ObjectType()
+export class ReviewNestedComment {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
   @Column({ type: "varchar", length: 255 })
   @Field(() => String)
-  comment: string;
+  reviewNestedComment: string;
 
   @CreateDateColumn()
   @Field(() => Date)
-  createdAt: Date;
+  createAt: Date;
 
   @DeleteDateColumn()
   @Field(() => Date)
@@ -33,7 +33,7 @@ export class Comment {
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => Board)
-  @Field(() => Board)
-  board: Board;
+  @ManyToOne(() => ReviewComment)
+  @Field(() => ReviewComment)
+  reviewComment: ReviewComment;
 }

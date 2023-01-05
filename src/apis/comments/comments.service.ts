@@ -4,11 +4,6 @@ import { Repository } from "typeorm";
 import { Board } from "../boards/entities/board.entity";
 import { User } from "../users/entities/user.entity";
 import { Comment } from "./entity/comment.entity";
-import {
-  ICommentServiceDelete,
-  ICommentServiceUpdate,
-  ICreateCommentInput,
-} from "./interface/comment.service.interface";
 
 @Injectable()
 export class CommentsService {
@@ -23,30 +18,33 @@ export class CommentsService {
     private readonly boardRepository: Repository<Board>
   ) {}
 
-  async create({ createCommentInput, user }: ICreateCommentInput) {
-    const { boardId, content } = createCommentInput;
-    const findUser = await this.userRepository.findOne({ where: { id: user } });
-    const findBoard = await this.boardRepository.findOne({
+  async findAll({ boardId, page }) {
+    return await this.commentRepository.find({
+      where: { board: { id: boardId } },
+      relations: ["board", "user"],
+      order: { createdAt: "ASC" },
+      take: 9,
+      skip: page ? (page - 1) * 9 : 0,
+    });
+  }
+
+  async create({ user, boardId, comment }) {
+    const findId = await this.boardRepository.findOne({
       where: { id: boardId },
     });
 
-    const result = await this.commentRepository.save({
-      content,
+    const findUser = await this.userRepository.findOne({
+      where: { id: user },
+    });
+
+    return await this.commentRepository.save({
+      comment,
+      board: findId,
       user: findUser,
-      board: findBoard,
-    });
-
-    return result;
-  }
-
-  findOne({ commentId }) {
-    return this.commentRepository.findOne({
-      where: { id: commentId },
-      relations: ["user", "board"],
     });
   }
 
-  async delete({ commentId, user }: ICommentServiceDelete): Promise<boolean> {
+  async delete({ commentId, user }) {
     const findUser = await this.userRepository.findOne({
       where: { id: user },
     });
@@ -59,16 +57,13 @@ export class CommentsService {
     if (findUser.id !== findComment.user.id)
       throw new ConflictException("권한이 없습니다.");
 
-    const result = await this.commentRepository.softDelete({ id: commentId });
-
+    const result = await this.commentRepository.softDelete({
+      id: commentId,
+    });
     return result.affected ? true : false;
   }
 
-  async update({
-    commentId,
-    updateCommentInput,
-    user,
-  }: ICommentServiceUpdate): Promise<Comment> {
+  async update({ commentId, updateComment, user }) {
     const findUser = await this.userRepository.findOne({
       where: { id: user },
     });
@@ -84,7 +79,7 @@ export class CommentsService {
     return await this.commentRepository.save({
       ...findComment,
       user: findUser,
-      ...updateCommentInput,
+      comment: updateComment,
     });
   }
 }

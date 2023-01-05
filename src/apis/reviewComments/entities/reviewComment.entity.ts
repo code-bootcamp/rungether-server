@@ -19,7 +19,7 @@ export class ReviewComment {
 
   @Column({ type: "varchar", length: 255 })
   @Field(() => String)
-  reviewComment;
+  reviewComment: string;
 
   @CreateDateColumn()
   @Field(() => Date)
