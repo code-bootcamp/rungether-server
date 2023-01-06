@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { FollowCount } from "../followCounts/followCount.entity";
 import { Image } from "../Image/entities/image.entity";
 import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
@@ -11,6 +12,7 @@ import { MailsService } from "./mails.service";
     TypeOrmModule.forFeature([
       User, //
       Image,
+      FollowCount,
     ]),
   ],
   providers: [

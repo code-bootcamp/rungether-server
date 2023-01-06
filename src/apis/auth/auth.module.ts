@@ -6,6 +6,7 @@ import { AuthService } from "./auth.service";
 import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
 import { Image } from "../Image/entities/image.entity";
+import { FollowCount } from "../followCounts/followCount.entity";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { Image } from "../Image/entities/image.entity";
     TypeOrmModule.forFeature([
       User, //
       Image,
+      FollowCount,
     ]),
   ],
   providers: [

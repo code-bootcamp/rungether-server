@@ -45,17 +45,6 @@ export class FollowService {
         user2: { id: userId },
       });
 
-      if (!followingUserCount) {
-        await this.followCountRepository.save({
-          user: { id: fromUserId },
-        });
-      }
-
-      if (!followerUserCount) {
-        await this.followCountRepository.save({
-          user: { id: userId },
-        });
-      }
       await this.followCountRepository.update(
         { user: { id: fromUserId } },
         { followCount: +1 }
@@ -100,5 +89,13 @@ export class FollowService {
       .getMany();
 
     return findUserFollowing;
+  }
+
+  async findFollowCount({ userId }) {
+    const result = await this.followCountRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["user"],
+    });
+    return result;
   }
 }

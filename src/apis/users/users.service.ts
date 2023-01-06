@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   CACHE_MANAGER,
-  ConflictException,
   Inject,
   Injectable,
   NotFoundException,
@@ -12,6 +11,7 @@ import { User } from "./entities/user.entity";
 import * as bcrypt from "bcrypt";
 import { Cache } from "cache-manager";
 import { Image } from "../Image/entities/image.entity";
+import { FollowCount } from "../followCounts/followCount.entity";
 
 @Injectable()
 export class UsersService {
@@ -21,6 +21,9 @@ export class UsersService {
 
     @InjectRepository(Image)
     private readonly imagesRepository: Repository<Image>,
+
+    @InjectRepository(FollowCount)
+    private readonly followCountRepository: Repository<FollowCount>,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache
@@ -64,18 +67,26 @@ export class UsersService {
 
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
 
-    let Image = null;
+    let userImage = null;
 
     if (image) {
-      Image = await this.imagesRepository.save({
+      userImage = await this.imagesRepository.save({
         imgUrl: image,
       });
     }
 
-    const result = this.usersRepository.save({
+    const result = await this.usersRepository.save({
       ...createUserInput,
-      image: Image,
+      image: userImage,
       password: hashedPassword,
+    });
+
+    const findUser = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    this.followCountRepository.save({
+      user: findUser,
     });
 
     return result;
@@ -89,21 +100,21 @@ export class UsersService {
       relations: ["image"],
     });
 
-    if (userId !== findUser.id) {
-      throw new ConflictException("수정 권한이 없습니다.");
-    }
+    // if (userId !== findUser.id) {
+    //   throw new ConflictException("수정 권한이 없습니다.");
+    // }
 
-    let Image = {};
+    let userImage = {};
 
     if (image) {
       await this.imagesRepository.softDelete({ id: findUser.image.id });
-      Image = await this.imagesRepository.save({ imgUrl: image });
+      userImage = await this.imagesRepository.save({ imgUrl: image });
     }
 
     return await this.usersRepository.save({
       ...findUser,
       ...user,
-      image: { ...Image },
+      image: { ...userImage },
     });
   }
 
