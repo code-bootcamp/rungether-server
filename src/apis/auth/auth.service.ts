@@ -42,12 +42,12 @@ export class AuthService {
 
     res.setHeader(
       "Set-Cookie",
-      `refreshToken=${refreshToken}; path=/; domain=.backkim.shop; SameSite=None; Secure; httpOnly`
+      `refreshToken=${refreshToken}; path=/; domain=.meonjifather.shop; SameSite=None; Secure; httpOnly`
     );
-    res.setHeader(
-      "Set-Cookie",
-      `refreshToken=${refreshToken}; path=/; Secure; httpOnly;`
-    );
+    // res.setHeader(
+    //   "Set-Cookie",
+    //   `refreshToken=${refreshToken}; path=/; Secure; httpOnly;`
+    // );
     return refreshToken;
   }
 }

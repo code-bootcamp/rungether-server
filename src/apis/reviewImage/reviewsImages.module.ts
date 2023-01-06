@@ -13,4 +13,4 @@ import { ReviewsImagesService } from "./reviewsImages.service";
     ReviewsImagesService,
   ],
 })
-export class ReviwesImagesModule {}
+export class ReviewsImagesModule {}

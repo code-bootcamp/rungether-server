@@ -1,5 +1,5 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
 import { Pick } from "./entities/pick.entity";
@@ -13,9 +13,12 @@ export class PicksResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Pick])
-  fetchMyPick(@Context() context: IContext) {
+  fetchMyPickBoards(
+    @Context() context: IContext,
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
     const userId = context.req.user.id;
-    return this.picksService.find({ userId });
+    return this.picksService.find({ userId, page });
   }
 
   @UseGuards(GqlAuthAccessGuard)

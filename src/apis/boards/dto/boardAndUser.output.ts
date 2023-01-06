@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { StartingPoint } from "src/apis/startingPoint/entities/startingPoint.entity";
 import { User } from "src/apis/users/entities/user.entity";
 
 @ObjectType()
@@ -29,13 +28,10 @@ export class BoardAndUser {
   gender: string;
 
   @Field(() => Int)
-  peoples: number;
+  recruitPeople: number;
 
   @Field(() => String)
   thumbnail: string;
-
-  @Field(() => String)
-  startingPoint: StartingPoint;
 
   @Field(() => User)
   user: User;
