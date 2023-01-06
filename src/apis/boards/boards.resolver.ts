@@ -1,5 +1,6 @@
 import { UseGuards } from "@nestjs/common";
 import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { type } from "os";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
 import { PicksService } from "../picks/picks.service";
@@ -20,6 +21,26 @@ export class BoardsResolver {
     @Args("boardId") boardId: string //
   ) {
     return this.boardsService.findOneById({ boardId });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Board)
+  fetchMyBoard(
+    @Context() context: IContext, //
+    @Args("boardId") boardId: string
+  ) {
+    const userId = context.req.user.id;
+    return this.boardsService.findMyUserId({ userId, boardId });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Board])
+  fetchMyAllBoards(
+    @Context() context: IContext,
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
+    const userId = context.req.user.id;
+    return this.boardsService.findAllMyUserId({ userId, page });
   }
 
   @Query(() => [Board])

@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommentsService } from "../comments/comments.service";
 import { Comment } from "../comments/entity/comment.entity";
 import { Image } from "../Image/entities/image.entity";
+import { Location } from "../location/entities/location.entity";
 import { Pick } from "../picks/entities/pick.entity";
 import { PicksService } from "../picks/picks.service";
 import { User } from "../users/entities/user.entity";
@@ -17,6 +18,7 @@ import { Board } from "./entities/board.entity";
       Image,
       User,
       Pick,
+      Location,
       Comment,
     ]),
   ],

@@ -20,7 +20,7 @@ import { ReviewBoardsModule } from "./apis/reviewBoards/reviewBoards.module";
 import { ReviewCommentsModule } from "./apis/reviewComments/reviewComments.module";
 import { LikeModule } from "./apis/like/like.module";
 import { AttendListModule } from "./apis/attendList/attendList.module";
-import { ReviwesImagesModule } from "./apis/reviewImage/reviewsImages.module";
+import { ReviewsImagesModule } from "./apis/reviewImage/reviewsImages.module";
 import { AppController } from "./app.controller";
 import { FollowModule } from "./apis/follow/follow.module";
 
@@ -37,7 +37,7 @@ import { FollowModule } from "./apis/follow/follow.module";
     NestedCommentsModule,
     ReviewBoardsModule,
     ReviewCommentsModule,
-    ReviwesImagesModule,
+    ReviewsImagesModule,
     PicksModule,
     UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -50,7 +50,7 @@ import { FollowModule } from "./apis/follow/follow.module";
           "https://mydatabase.meonjifather.shop/",
           "https://meonjifather.shop/",
         ],
-        credentials: true,
+        Credential: true,
         exposedHeaders: ["Set-Cookie", "Cookie"],
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         allowedHeaders: [

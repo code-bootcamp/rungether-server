@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { Image } from "src/apis/Image/entities/image.entity";
+import { Location } from "src/apis/location/entities/location.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
@@ -78,4 +79,9 @@ export class Board {
   @Field(() => Image, { nullable: true })
   @OneToOne(() => Image, { nullable: true })
   image: Image;
+
+  @JoinColumn()
+  @Field(() => Location)
+  @OneToOne(() => Location)
+  location: Location;
 }

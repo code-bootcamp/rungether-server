@@ -1,4 +1,5 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
+import { LocationInput } from "src/apis/location/dto/location.input";
 
 @InputType()
 export class CreateBoardInput {
@@ -25,4 +26,7 @@ export class CreateBoardInput {
 
   @Field(() => String, { nullable: true })
   image: string;
+
+  @Field(() => LocationInput)
+  location: LocationInput;
 }

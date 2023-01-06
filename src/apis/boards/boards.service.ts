@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from "typeorm";
 import { Image } from "../Image/entities/image.entity";
+import { Location } from "../location/entities/location.entity";
 import { User } from "../users/entities/user.entity";
 import { Board } from "./entities/board.entity";
 
@@ -19,13 +20,16 @@ export class BoardsService {
     private readonly imagesRepository: Repository<Image>,
 
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>
+    private readonly usersRepository: Repository<User>,
+
+    @InjectRepository(Location)
+    private readonly locationsRepository: Repository<Location>
   ) {}
 
   findOneById({ boardId }) {
     return this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ["user", "image"],
+      relations: ["user", "image", "location"],
     });
   }
 
@@ -35,9 +39,31 @@ export class BoardsService {
     });
   }
 
+  async findMyUserId({ userId, boardId }) {
+    const result = await this.boardsRepository.findOne({
+      where: {
+        id: boardId,
+        user: { id: userId },
+      },
+      relations: ["user"],
+    });
+
+    return result;
+  }
+
+  findAllMyUserId({ userId, page }) {
+    return this.boardsRepository.find({
+      where: { user: { id: userId } },
+      relations: ["user", "image", "location"],
+      order: { createdAt: "DESC" },
+      take: 5,
+      skip: page ? (page - 1) * 5 : 0,
+    });
+  }
+
   findAll(page) {
     return this.boardsRepository.find({
-      relations: ["user", "image"],
+      relations: ["user", "image", "location"],
       order: { createdAt: "DESC" },
       take: 9,
       skip: page ? (page - 1) * 9 : 0,
@@ -46,7 +72,7 @@ export class BoardsService {
 
   findAllWithPickCount(page) {
     return this.boardsRepository.find({
-      relations: ["user", "image"],
+      relations: ["user", "image", "location"],
       order: { pickCount: "DESC" },
       take: 9,
       skip: page ? (page - 1) * 9 : 0,
@@ -67,7 +93,7 @@ export class BoardsService {
   }
 
   async create({ userId, createBoardInput }) {
-    const { image, ...board } = createBoardInput;
+    const { image, location, ...board } = createBoardInput;
 
     const User = await this.usersRepository.findOne({
       where: { id: userId },
@@ -81,6 +107,14 @@ export class BoardsService {
       });
     }
 
+    if (!location) {
+      throw new UnprocessableEntityException("위치 정보를 지정해주세요");
+    }
+
+    const Location = await this.locationsRepository.save({
+      ...location,
+    });
+
     const checkCountBoard = await this.findAllByUserId({ userId });
     if (checkCountBoard.length >= 20) {
       throw new Error("게시글은 20개까지만 작성 가능합니다.");
@@ -88,6 +122,7 @@ export class BoardsService {
 
     const result = await this.boardsRepository.save({
       ...board,
+      location: Location,
       image: Image,
       user: { ...User },
     });
@@ -96,7 +131,7 @@ export class BoardsService {
   }
 
   async update({ boardId, userId, updateBoardInput }) {
-    const { image, ...board } = updateBoardInput;
+    const { image, location, ...board } = updateBoardInput;
 
     const findUser = await this.usersRepository.findOne({
       where: { id: userId },
@@ -105,11 +140,18 @@ export class BoardsService {
 
     const findBoard = await this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ["user", "image"],
+      relations: ["user", "image", "location"],
     });
 
-    if (userId !== findUser.id) {
+    if (userId !== findBoard.user.id) {
       throw new ConflictException("수정 권한이 없습니다.");
+    }
+
+    let Location = {};
+
+    if (location) {
+      await this.locationsRepository.softDelete({ id: findBoard.location.id });
+      Location = await this.locationsRepository.save({ ...location });
     }
 
     let Image = {};
@@ -123,6 +165,7 @@ export class BoardsService {
       ...findBoard,
       ...board,
       user: findUser,
+      location: { ...Location },
       image: { ...Image },
     });
   }
