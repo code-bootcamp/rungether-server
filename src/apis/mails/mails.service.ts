@@ -30,7 +30,24 @@ export class MailsService {
     return tokenTemplate;
   }
 
-  async sendTemplateToEmail({ email, authTempleate }) {
+  getPasswordTemplate({ nickname, randomPw }) {
+    const passwordTemplate = `
+    <html>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+    <div width: 500px>
+        <h2>[rungether] ${nickname}님, 임시 비밀번호 안내입니다.</h2>
+        <hr />
+        <div style="padding: 10px;">
+            <div style="margin-bottom: 20px; font-size: 18px;">요청하신 임시비밀번호가 발급되었습니다. 로그인 후 새로운 비밀번호로 변경하여 이용하시기 바랍니다.</div>
+            <div style="margin-bottom: 20px; font-size: 18px;">임시 비밀번호: ${randomPw}</div>
+        </div>
+    </div>
+</html>
+`;
+    return passwordTemplate;
+  }
+
+  async sendTemplateToEmail({ email, authTempleate, comment }) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -43,7 +60,7 @@ export class MailsService {
       .sendMail({
         from: process.env.EMAIL_SENDER,
         to: email,
-        subject: "[Rungether] 요청하신 인증번호 6자리를 입력 해 주세요.",
+        subject: `${comment}`,
         html: authTempleate,
       })
       .catch((err) => {

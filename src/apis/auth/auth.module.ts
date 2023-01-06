@@ -7,6 +7,7 @@ import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
 import { Image } from "../Image/entities/image.entity";
 import { FollowCount } from "../followCounts/followCount.entity";
+import { MailsService } from "../mails/mails.service";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { FollowCount } from "../followCounts/followCount.entity";
     AuthResolver, //
     AuthService,
     UsersService,
+    MailsService,
   ],
 })
 export class AuthModule {}

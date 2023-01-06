@@ -1,7 +1,8 @@
-import { Injectable, UseGuards } from "@nestjs/common";
+import { BadRequestException, Injectable, UseGuards } from "@nestjs/common";
 import { Args, Context, Mutation, Query } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
+import { MailsService } from "../mails/mails.service";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-board.input";
 import { User } from "./entities/user.entity";
@@ -10,7 +11,8 @@ import { UsersService } from "./users.service";
 @Injectable()
 export class UsersResolver {
   constructor(
-    private readonly usersService: UsersService //
+    private readonly usersService: UsersService, //
+    private readonly mailsService: MailsService
   ) {}
 
   @Mutation(() => String)
@@ -64,7 +66,24 @@ export class UsersResolver {
     return this.usersService.delete({ userId });
   }
 
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => String)
-  // tempPassword(@Context() context: IContext) {}
+  @Mutation(() => String)
+  findUserPassword(
+    @Args("email") email: string //
+  ) {
+    return this.usersService.findUserPassword({ email });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String)
+  updatePassword(
+    @Context() context: IContext, //
+    @Args("password") password: string,
+    @Args("rePassword") rePassword: string
+  ) {
+    const userId = context.req.user.id;
+    if (password !== rePassword)
+      throw new BadRequestException("비밀번호를 다시 확인 해 주세요.");
+
+    return this.usersService.updatePassword({ userId, password });
+  }
 }

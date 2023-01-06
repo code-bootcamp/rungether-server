@@ -29,7 +29,9 @@ export class MailsResolver {
 
     const authTempleate = this.mailsService.getAuthNumberTemplate({ token });
 
-    this.mailsService.sendTemplateToEmail({ email, authTempleate });
+    const comment = "[Rungether] 요청하신 인증번호 6자리를 입력 해 주세요.";
+
+    this.mailsService.sendTemplateToEmail({ email, authTempleate, comment });
 
     return "인증번호가 전송 되었습니다.";
   }

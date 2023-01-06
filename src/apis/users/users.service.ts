@@ -12,10 +12,13 @@ import * as bcrypt from "bcrypt";
 import { Cache } from "cache-manager";
 import { Image } from "../Image/entities/image.entity";
 import { FollowCount } from "../followCounts/followCount.entity";
+import { MailsService } from "../mails/mails.service";
 
 @Injectable()
 export class UsersService {
   constructor(
+    private readonly mailsService: MailsService,
+
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
 
@@ -121,5 +124,55 @@ export class UsersService {
   async delete({ userId }) {
     const result = await this.usersRepository.softDelete({ id: userId });
     return result.affected ? true : false;
+  }
+
+  async findUserPassword({ email }) {
+    const findUser = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    if (findUser.email !== email) {
+      throw new Error("가입된 이메일 주소가 없습니다.");
+    }
+
+    const nickname = findUser.nickname;
+
+    // const userNickname = await this.usersRepository.findOne({
+    //   where: { e },
+    // });
+
+    const randomPw = Math.random()
+      .toString(30)
+      .substring(2, 8)
+      .padStart(8, "a1");
+
+    const hashPw = await bcrypt.hash(randomPw, 10);
+
+    this.usersRepository.update({ email: email }, { password: hashPw });
+
+    const authTempleate = await this.mailsService.getPasswordTemplate({
+      nickname,
+      randomPw,
+    });
+
+    const comment = `[rungether] ${nickname}님, 임시 비밀번호 안내입니다`;
+
+    this.mailsService.sendTemplateToEmail({ email, authTempleate, comment });
+
+    return "임시 비밀번호가 전송되었습니다";
+  }
+
+  async updatePassword({ userId, password }) {
+    const hashedPw = await bcrypt.hash(password, 10);
+    const changePw = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    await this.usersRepository.save({
+      ...changePw,
+      password: hashedPw,
+    });
+
+    return "비밀번호가 정상적으로 변경되었습니다.";
   }
 }
