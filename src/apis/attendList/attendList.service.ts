@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Board } from "../boards/entities/board.entity";
@@ -29,9 +29,13 @@ export class AttendListService {
       relations: ["user"],
     });
 
-    const checkDuplicate = await this.findUserList({
-      userId,
-      boardId,
+    if (board.user.id === userId) throw new BadRequestException();
+
+    const checkDuplicate = await this.attendListRepository.find({
+      where: {
+        board: { id: boardId },
+        user: { id: userId },
+      },
     });
 
     if (checkDuplicate.length !== 0) {
@@ -39,7 +43,7 @@ export class AttendListService {
         { id: boardId },
         { attendCount: board.attendCount - 1 }
       );
-      await this.delete({ user, board });
+      await this.attendListRepository.delete({ user, board });
       return "참가 취소";
     }
 
@@ -48,7 +52,10 @@ export class AttendListService {
       { attendCount: board.attendCount + 1 }
     );
 
-    this.create({ user, board });
+    this.attendListRepository.save({
+      board: boardId,
+      user: userId,
+    });
 
     return "참가 완료";
   }
@@ -81,6 +88,8 @@ export class AttendListService {
       where: { user: { id: userId } },
       relations: ["user", "board"],
     });
+
+    console.log(result);
 
     return result;
   }

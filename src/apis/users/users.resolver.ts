@@ -64,7 +64,10 @@ export class UsersResolver {
     return this.usersService.delete({ userId });
   }
 
-  // @UseGuards(GqlAuthAccessGuard)
   // @Mutation(() => String)
-  // tempPassword(@Context() context: IContext) {}
+  // tempPassword(
+  //   @Context() context: IContext
+  //   ) {
+  //   const userId = context.req.user.id;
+  // }
 }
