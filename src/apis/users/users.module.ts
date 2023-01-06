@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { FollowCount } from "../followCounts/followCount.entity";
 import { Image } from "../Image/entities/image.entity";
 import { User } from "./entities/user.entity";
 import { UsersResolver } from "./users.resolver";
@@ -10,6 +11,7 @@ import { UsersService } from "./users.service";
     TypeOrmModule.forFeature([
       User, //
       Image,
+      FollowCount,
     ]),
   ],
 

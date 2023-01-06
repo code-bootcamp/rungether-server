@@ -73,7 +73,6 @@ import { FollowModule } from "./apis/follow/follow.module";
       entities: [__dirname + "/apis/**/*.entity.*"],
       synchronize: true,
       logging: true,
-      timezone: "z",
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
