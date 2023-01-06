@@ -23,12 +23,14 @@ import { AttendListModule } from "./apis/attendList/attendList.module";
 import { ReviewsImagesModule } from "./apis/reviewImage/reviewsImages.module";
 import { AppController } from "./app.controller";
 import { FollowModule } from "./apis/follow/follow.module";
+import { ChatModule } from "./apis/chat/chat.module";
 
 @Module({
   imports: [
     AttendListModule,
     AuthModule,
     BoardModule,
+    ChatModule,
     CommentsModule,
     EmailModule,
     FilesModule,
