@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   backend:
+    # image: asia.gcr.io/rungether-374202/rungether-nestjs:0.0.1
     image: asia.gcr.io/backend-371412/rungether-nestjs:2.6
     platform: linux/x86_64
     build:
