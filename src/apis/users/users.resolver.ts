@@ -30,6 +30,11 @@ export class UsersResolver {
     return this.usersService.findAll();
   }
 
+  @Query(() => User)
+  fetchUser(@Args("userId") userId: string) {
+    return this.usersService.findUser({ userId });
+  }
+
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
   fetchUserLoggedIn(
