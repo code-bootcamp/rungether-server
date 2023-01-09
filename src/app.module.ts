@@ -24,6 +24,7 @@ import { ReviewsImagesModule } from "./apis/reviewImage/reviewsImages.module";
 import { AppController } from "./app.controller";
 import { FollowModule } from "./apis/follow/follow.module";
 import { ChatModule } from "./apis/chat/chat.module";
+import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
   imports: [
@@ -82,6 +83,7 @@ import { ChatModule } from "./apis/chat/chat.module";
       isGlobal: true,
       // url: "redis://10.112.81.3:6379", // 쿠버네티스/ Redis
     }),
+    MongooseModule.forRoot(process.env.MONGO_URI),
   ],
   controllers: [AppController],
   providers: [AppService, JwtAccessStrategy, JwtRefreshStrategy],
