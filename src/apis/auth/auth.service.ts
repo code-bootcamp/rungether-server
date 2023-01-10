@@ -28,6 +28,7 @@ export class AuthService {
       "http://localhost:3000/",
       "https://mydatabase.meonjifather.shop/",
       "https://meonjifather.shop/",
+      "https://backsol2.shop/",
     ];
     const origin = req.headers.origin;
     if (permittedOrigins.includes(origin)) {
@@ -44,6 +45,10 @@ export class AuthService {
       "Set-Cookie",
       `refreshToken=${refreshToken}; path=/; domain=.meonjifather.shop; SameSite=None; Secure; httpOnly`
     );
+    // res.setHeader(
+    //   "Set-Cookie",
+    //   `refreshToken=${refreshToken}; path=/; domain=.backsol2.shop; SameSite=None; Secure; httpOnly`
+    // );
     // res.setHeader(
     //   "Set-Cookie",
     //   `refreshToken=${refreshToken}; path=/; Secure; httpOnly;`
