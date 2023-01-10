@@ -111,6 +111,6 @@ export class BoardsResolver {
   ) {
     const userId = context.req.user.id;
     this.picksService.delete({ boardId, userId });
-    return this.boardsService.delete({ boardId, userId });
+    return this.boardsService.delete({ userId, boardId });
   }
 }

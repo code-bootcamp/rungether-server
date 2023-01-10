@@ -184,7 +184,11 @@ export class BoardsService {
       throw new UnprocessableEntityException("삭제 권한이 없습니다!");
     }
 
-    const result = await this.boardsRepository.softDelete({
+    this.imagesRepository.delete({
+      board: { id: boardId },
+    });
+
+    const result = await this.boardsRepository.delete({
       id: boardId,
       user: { id: userId },
     });

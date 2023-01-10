@@ -11,7 +11,11 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://mydatabase.meonjifather.shop/",
+      "https://meonjifather.shop/",
+    ],
     credentials: true,
   });
   const redisIoAdapter = new RedisAdapter(app);
