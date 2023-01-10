@@ -50,21 +50,8 @@ import { ReviewNestedCommentsModule } from "./apis/reviewNestedComments/reviewNe
       autoSchemaFile: "src/commons/graphql/schema.gql",
       context: ({ req, res }) => ({ req, res }),
       cors: {
-        origin: [
-          "http://localhost:3000",
-          "https://mydatabase.meonjifather.shop/",
-          "https://meonjifather.shop/",
-        ],
-        Credential: true,
-        exposedHeaders: ["Set-Cookie", "Cookie"],
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-        allowedHeaders: [
-          "Access-Control-Allow-Headers",
-          "Authorization",
-          "X-Requested-With",
-          "Content-Type",
-          "Accept",
-        ],
+        origin: "http://localhost:3000",
+        credential: true,
       },
     }),
     ConfigModule.forRoot(),
