@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Board } from "src/apis/boards/entities/board.entity";
 import { Image } from "src/apis/Image/entities/image.entity";
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -62,4 +64,9 @@ export class User {
   @Field(() => Image, { nullable: true })
   @OneToOne(() => Image, { nullable: true })
   image: Image;
+
+  @OneToMany(() => Board, (board) => board.user, {
+    onDelete: "CASCADE",
+  })
+  board: Board;
 }
