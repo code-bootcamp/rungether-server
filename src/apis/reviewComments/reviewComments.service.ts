@@ -23,8 +23,8 @@ export class ReviewCommentsService {
       where: { reviewBoard: { id: reviewBoardId } },
       relations: ["reviewBoard", "user"],
       order: { createdAt: "ASC" },
-      take: 9,
-      skip: page ? (page - 1) * 9 : 0,
+      take: 4,
+      skip: page ? (page - 1) * 4 : 0,
     });
   }
 

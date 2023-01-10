@@ -5,6 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from "typeorm";
+import { AttendList } from "../attendList/entities/attendList.entity";
 import { Image } from "../Image/entities/image.entity";
 import { Location } from "../location/entities/location.entity";
 import { User } from "../users/entities/user.entity";
@@ -24,12 +25,14 @@ export class BoardsService {
 
     @InjectRepository(Location)
     private readonly locationsRepository: Repository<Location>
-  ) {}
+  ) // @InjectRepository(AttendList)
+  // private readonly attendListRepository: Repository<AttendList>
+  {}
 
   findOneById({ boardId }) {
     return this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ["user", "image", "location"],
+      relations: ["user", "image", "location", "attendList", "attendList.user"],
     });
   }
 
@@ -50,6 +53,25 @@ export class BoardsService {
 
     return result;
   }
+
+  // //보드수정
+  // async findMyUserIdWithAttendListId({ userId, boardId, attendListId }) {
+  //   const result = await this.boardsRepository.findOne({
+  //     where: {
+  //       id: boardId,
+  //       user: { id: userId },
+  //     },
+  //     relations: ["user"],
+  //   });
+  //   const result2 = await this.attendListRepository.findOne({
+  //     where: {
+  //       board: { id: result.id },
+  //     },
+  //     relations: ["board"],
+  //   });
+  //   return result2;
+  // }
+  // //보드수정
 
   findAllMyUserId({ userId, page }) {
     return this.boardsRepository.find({
