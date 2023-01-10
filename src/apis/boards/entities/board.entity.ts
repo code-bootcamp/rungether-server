@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { AttendList } from "src/apis/attendList/entities/attendList.entity";
 import { Image } from "src/apis/Image/entities/image.entity";
 import { Location } from "src/apis/location/entities/location.entity";
 import { User } from "src/apis/users/entities/user.entity";
@@ -10,6 +11,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -84,4 +86,8 @@ export class Board {
   @Field(() => Location)
   @OneToOne(() => Location)
   location: Location;
+
+  @OneToMany(() => AttendList, (attendList) => attendList.board)
+  @Field(() => [AttendList])
+  attendList: AttendList[];
 }
