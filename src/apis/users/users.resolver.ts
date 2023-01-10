@@ -65,10 +65,11 @@ export class UsersResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   deleteUser(
-    @Context() context: IContext //
+    @Context() context: IContext, //
+    @Args("imageId") imageId: string
   ) {
     const userId = context.req.user.id;
-    return this.usersService.delete({ userId });
+    return this.usersService.delete({ userId, imageId });
   }
 
   @Mutation(() => String)
