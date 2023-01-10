@@ -1,5 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
+import cookieParser from "cookie-parser";
 import { graphqlUploadExpress } from "graphql-upload";
 import { AppModule } from "./app.module";
 import { HttpExceptionFilter } from "./commons/filter/http-exception.fillter";
@@ -22,6 +23,8 @@ async function bootstrap() {
   await redisIoAdapter.connectToRedis();
 
   app.useWebSocketAdapter(redisIoAdapter);
+
+  app.use(cookieParser());
 
   app.useGlobalFilters(new HttpExceptionFilter());
 

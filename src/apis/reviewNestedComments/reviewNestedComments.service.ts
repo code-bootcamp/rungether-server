@@ -23,8 +23,8 @@ export class ReviewNestedCommentsService {
       where: { reviewComment: { id: reviewCommentId } },
       relations: ["reviewComment", "user"],
       order: { createAt: "ASC" },
-      take: 9,
-      skip: page ? (page - 1) * 9 : 0,
+      take: 4,
+      skip: page ? (page - 1) * 4 : 0,
     });
   }
 

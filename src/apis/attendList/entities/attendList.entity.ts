@@ -27,7 +27,6 @@ export class AttendList {
   @Field(() => User)
   user: User;
 
-  @JoinTable()
   @ManyToOne(() => Board)
   @Field(() => Board)
   board: Board;

@@ -25,6 +25,7 @@ import { AppController } from "./app.controller";
 import { FollowModule } from "./apis/follow/follow.module";
 import { ChatModule } from "./apis/chat/chat.module";
 import { MongooseModule } from "@nestjs/mongoose";
+import { ReviewNestedCommentsModule } from "./apis/reviewNestedComments/reviewNestedComments.module";
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { MongooseModule } from "@nestjs/mongoose";
     NestedCommentsModule,
     ReviewBoardsModule,
     ReviewCommentsModule,
+    ReviewNestedCommentsModule,
     ReviewsImagesModule,
     PicksModule,
     UsersModule,

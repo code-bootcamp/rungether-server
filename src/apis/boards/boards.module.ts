@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { AttendList } from "../attendList/entities/attendList.entity";
 import { CommentsService } from "../comments/comments.service";
 import { Comment } from "../comments/entity/comment.entity";
 import { Image } from "../Image/entities/image.entity";
@@ -20,6 +21,7 @@ import { Board } from "./entities/board.entity";
       Pick,
       Location,
       Comment,
+      AttendList,
     ]),
   ],
 

@@ -3,6 +3,7 @@ import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { type } from "os";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
+import { AttendList } from "../attendList/entities/attendList.entity";
 import { PicksService } from "../picks/picks.service";
 import { BoardsService } from "./boards.service";
 import { CreateBoardInput } from "./dto/createBoard.input";
@@ -32,6 +33,23 @@ export class BoardsResolver {
     const userId = context.req.user.id;
     return this.boardsService.findMyUserId({ userId, boardId });
   }
+
+  // //보드수정
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Query(() => AttendList)
+  // fetchMyBoardWithAttendList(
+  //   @Context() context: IContext, //
+  //   @Args("boardId") boardId: string,
+  //   @Args("attendListId") attendListId: string
+  // ) {
+  //   const userId = context.req.user.id;
+  //   return this.boardsService.findMyUserIdWithAttendListId({
+  //     userId,
+  //     boardId,
+  //     attendListId,
+  //   });
+  // }
+  // //보드수정
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Board])
