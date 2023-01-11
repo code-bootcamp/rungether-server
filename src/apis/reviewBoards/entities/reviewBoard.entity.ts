@@ -48,6 +48,10 @@ export class ReviewBoard {
   @OneToMany(() => ReviewImage, (reviewImage) => reviewImage.reviewBoard)
   reviewImage: ReviewImage[];
 
+  @Column()
+  @Field(() => String)
+  thumbnailReviewImage: string;
+
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;

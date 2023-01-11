@@ -45,3 +45,9 @@ export class ChatResolver {
     });
   }
 }
+// node 사용 한 야믈 파일안에 노드서버소켓, 네스트, njinx, mysql, 몽고
+// 데이터 플로우
+// njinx -> 소켓 -> 몽고
+//       -> 백엔드 -> MYSQL
+
+//새로운 타입을

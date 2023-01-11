@@ -28,26 +28,26 @@ export class User {
   @Field()
   nickname: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   age: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   gender: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   region: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   prefer: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   grade: string;
 
@@ -64,9 +64,4 @@ export class User {
   @Field(() => Image, { nullable: true })
   @OneToOne(() => Image, { nullable: true })
   image: Image;
-
-  @OneToMany(() => Board, (board) => board.user, {
-    onDelete: "CASCADE",
-  })
-  board: Board;
 }
