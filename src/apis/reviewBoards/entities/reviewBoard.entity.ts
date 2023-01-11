@@ -50,7 +50,7 @@ export class ReviewBoard {
 
   @Column()
   @Field(() => String)
-  thumbnailReviewImage: string;
+  thumbnail: string;
 
   @CreateDateColumn()
   @Field(() => Date)
