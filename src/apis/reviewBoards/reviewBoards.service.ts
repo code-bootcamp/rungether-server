@@ -74,6 +74,7 @@ export class ReviewBoardsService {
     const result = await this.reviewBoardsRepository.save({
       user: { ...user },
       attendList: { ...attendList },
+      thumbnail: reviewImage[0],
       ...reviewBoard,
     });
 

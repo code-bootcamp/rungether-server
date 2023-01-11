@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -127,16 +128,34 @@ export class UsersService {
     });
   }
 
-  async delete({ userId, imageId }) {
-    this.imagesRepository.update({ id: imageId }, { imgUrl: null });
-
-    this.imagesRepository.delete({
-      user: { id: userId },
+  async delete({ userId }) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ["image"],
     });
 
-    const result = await this.usersRepository.delete({ id: userId });
+    if (!user)
+      throw new UnprocessableEntityException(
+        "해당 유저 정보를 찾을 수 없습니다!"
+      );
 
-    return result.affected ? true : false;
+    const userInfo = await this.usersRepository.save({
+      id: userId,
+      password: null,
+      email: user.email + "(탈퇴)",
+      nickname: user.nickname + "(탈퇴)",
+      age: null,
+      gender: null,
+      region: null,
+      prefer: null,
+      grade: null,
+      image: null,
+    });
+
+    await this.imagesRepository.delete({ id: user.image.id });
+
+    if (userInfo) return true;
+    else return false;
   }
 
   async findUserPassword({ email }) {

@@ -24,10 +24,8 @@ export class BoardsService {
     private readonly usersRepository: Repository<User>,
 
     @InjectRepository(Location)
-    private readonly locationsRepository: Repository<Location>
-  ) // @InjectRepository(AttendList)
-  // private readonly attendListRepository: Repository<AttendList>
-  {}
+    private readonly locationsRepository: Repository<Location> // @InjectRepository(AttendList) // private readonly attendListRepository: Repository<AttendList>
+  ) {}
 
   findOneById({ boardId }) {
     return this.boardsRepository.findOne({
@@ -193,10 +191,6 @@ export class BoardsService {
   }
 
   async delete({ boardId, userId }) {
-    const User = await this.usersRepository.findOne({
-      where: { id: userId },
-    });
-
     const Board = await this.boardsRepository.findOne({
       where: { id: boardId },
       relations: ["user"],
@@ -205,10 +199,6 @@ export class BoardsService {
     if (userId !== Board.user.id) {
       throw new UnprocessableEntityException("삭제 권한이 없습니다!");
     }
-
-    this.imagesRepository.delete({
-      board: { id: boardId },
-    });
 
     const result = await this.boardsRepository.delete({
       id: boardId,

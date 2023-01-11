@@ -1,7 +1,13 @@
-import { BadRequestException, Injectable, UseGuards } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  UnprocessableEntityException,
+  UseGuards,
+} from "@nestjs/common";
 import { Args, Context, Mutation, Query } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
+import { BoardsService } from "../boards/boards.service";
 import { MailsService } from "../mails/mails.service";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-board.input";
@@ -12,7 +18,8 @@ import { UsersService } from "./users.service";
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
-    private readonly mailsService: MailsService
+    private readonly mailsService: MailsService,
+    private readonly boardsService: BoardsService
   ) {}
 
   @Mutation(() => String)
@@ -64,12 +71,24 @@ export class UsersResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
-  deleteUser(
-    @Context() context: IContext, //
-    @Args("imageId") imageId: string
+  async deleteUser(
+    @Context() context: IContext //
   ) {
     const userId = context.req.user.id;
-    return this.usersService.delete({ userId, imageId });
+
+    if (await this.hasBoard(userId)) {
+      throw new UnprocessableEntityException(
+        "회원 탈퇴 전에 모집한 게시글을 삭제해주세요."
+      );
+    }
+    return await this.usersService.delete({ userId });
+  }
+
+  async hasBoard(userId) {
+    const result = await this.boardsService.findAllMyUserId(userId);
+    if (!result || result?.length === 0) return false;
+
+    return true;
   }
 
   @Mutation(() => String)
