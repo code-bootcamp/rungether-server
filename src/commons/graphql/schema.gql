@@ -33,7 +33,7 @@ type ReviewBoard {
   content: String!
   like: Int!
   user: User!
-  thumbnailReviewImage: String!
+  thumbnail: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime!
