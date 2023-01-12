@@ -29,9 +29,16 @@ export class ChatGateway implements OnModuleInit {
   }
 
   @SubscribeMessage("send")
-  sendMessage(@MessageBody() data: any) {
+  async sendMessage(@MessageBody() data: any) {
     console.log(data);
     const [room, nickname, message, userId] = data;
+    const boardUser = await this.chatService.findBoard({ boardId: room });
+    const boardUserId = boardUser.user.id;
+
     this.server.emit(room, [nickname, userId, message]);
+
+    if (boardUserId! == userId)
+      this.server.emit(boardUserId, [nickname, message, userId]);
+    await this.chatService.create({ userId: userId, boardId: room, message });
   }
 }
