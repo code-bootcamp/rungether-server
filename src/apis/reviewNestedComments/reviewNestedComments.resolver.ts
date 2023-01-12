@@ -38,7 +38,7 @@ export class ReviewNestedCommentsResolver {
   @Mutation(() => Boolean)
   deleteReviewNestedComment(
     @Context() context: IContext,
-    @Args("reviewNestedComment") reviewNestedCommentId: string
+    @Args("reviewNestedCommentId") reviewNestedCommentId: string
   ) {
     const user = context.req.user.id;
     return this.reviewNestedCommentsService.delete({
