@@ -26,6 +26,7 @@ import { FollowModule } from "./apis/follow/follow.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ReviewNestedCommentsModule } from "./apis/reviewNestedComments/reviewNestedComments.module";
 import { ChatModule } from "./gateways/chat.module";
+import { ChatHistoryModule } from "./apis/chatHistory/chatHistory.module";
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ChatModule } from "./gateways/chat.module";
     AuthModule,
     BoardModule,
     ChatModule,
+    ChatHistoryModule,
     CommentsModule,
     EmailModule,
     FilesModule,
