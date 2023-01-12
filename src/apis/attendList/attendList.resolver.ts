@@ -1,5 +1,5 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
@@ -24,9 +24,12 @@ export class AttendListResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [AttendList])
-  fetchAttendList(@Context() context: IContext) {
+  fetchAttendList(
+    @Context() context: IContext,
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ) {
     const userId = context.req.user.id;
-    return this.attendListService.findAll({ userId });
+    return this.attendListService.findAll({ userId, page });
   }
 }
 //푸쉬용

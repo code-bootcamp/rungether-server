@@ -4,7 +4,7 @@ services:
   backend:
     # image: asia.gcr.io/backend-371412/rungether-nestjs:4.2  //meonjifather.shop
     # image: asia.gcr.io/rungether-374202/rungether-nestjs:0.0.1
-    image: asia.gcr.io/backend-371412/rungether-nestjs:4.4
+    image: asia.gcr.io/backend-371412/rungether-nestjs:4.5
     platform: linux/x86_64
     build:
       context: .
