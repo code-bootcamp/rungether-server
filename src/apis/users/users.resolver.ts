@@ -4,7 +4,7 @@ import {
   UnprocessableEntityException,
   UseGuards,
 } from "@nestjs/common";
-import { Args, Context, Mutation, Query } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Query } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
 import { BoardsService } from "../boards/boards.service";
@@ -33,8 +33,10 @@ export class UsersResolver {
   }
 
   @Query(() => [User])
-  fetchUsers(): Promise<User[]> {
-    return this.usersService.findAll();
+  fetchUsers(
+    @Args("page", { nullable: true, type: () => Int }) page: number
+  ): Promise<User[]> {
+    return this.usersService.findAll({ page });
   }
 
   @Query(() => User)
@@ -50,6 +52,13 @@ export class UsersResolver {
     const userId = context.req.user.id;
     return this.usersService.findMe({ userId });
   }
+
+  // @Query(() => [User])
+  // fetchUsersWithFollowCount(
+  //   @Args("page", { nullable: true, type: () => Int }) page: number
+  // ) {
+  //   return this.boardsService.findAllWithFollowCount(page);
+  // }
 
   @Mutation(() => User)
   createUser(

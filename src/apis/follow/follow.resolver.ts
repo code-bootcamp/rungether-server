@@ -1,5 +1,5 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { GqlAuthAccessGuard } from "src/commons/auth/gql-auth.guard";
 import { IContext } from "src/commons/type/context";
 import { FollowCount } from "../followCounts/followCount.entity";
@@ -22,16 +22,18 @@ export class FollowResolver {
 
   @Query(() => [FollowerList])
   fetchFollower(
-    @Args("userId") userId: string //
+    @Args("userId") userId: string, //
+    @Args("page", { nullable: true, type: () => Int }) page: number
   ) {
-    return this.followService.findUserFollower({ userId });
+    return this.followService.findUserFollower({ userId, page });
   }
 
   @Query(() => [FollowingList])
   fetchFollowing(
-    @Args("userId") userId: string //
+    @Args("userId") userId: string, //
+    @Args("page", { nullable: true, type: () => Int }) page: number
   ) {
-    return this.followService.findUserFollowing({ userId });
+    return this.followService.findUserFollowing({ userId, page });
   }
 
   @Query(() => FollowCount)

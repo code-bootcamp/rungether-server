@@ -72,20 +72,24 @@ export class FollowService {
     }
   }
 
-  async findUserFollower({ userId }) {
+  async findUserFollower({ userId, page }) {
     const findFollower = await this.followRepository
       .createQueryBuilder("follow")
       .leftJoinAndSelect("follow.user2", "user")
       .where("follow.user2 = :id", { id: userId })
+      .skip((page - 1) * 8)
+      .take(8)
       .getMany();
     return findFollower;
   }
 
-  async findUserFollowing({ userId }) {
+  async findUserFollowing({ userId, page }) {
     const findUserFollowing = await this.followRepository
       .createQueryBuilder("follow")
       .leftJoinAndSelect("follow.user2", "user")
       .where("follow.user1 = :id", { id: userId })
+      .skip((page - 1) * 8)
+      .take(8)
       .getMany();
 
     return findUserFollowing;

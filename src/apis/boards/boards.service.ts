@@ -85,8 +85,8 @@ export class BoardsService {
     return this.boardsRepository.find({
       relations: ["user", "image", "location"],
       order: { createdAt: "DESC" },
-      take: 9,
-      skip: page ? (page - 1) * 9 : 0,
+      take: 8,
+      skip: page ? (page - 1) * 8 : 0,
     });
   }
 
@@ -94,8 +94,8 @@ export class BoardsService {
     return this.boardsRepository.find({
       relations: ["user", "image", "location"],
       order: { pickCount: "DESC" },
-      take: 9,
-      skip: page ? (page - 1) * 9 : 0,
+      take: 8,
+      skip: page ? (page - 1) * 8 : 0,
     });
   }
 

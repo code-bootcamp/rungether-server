@@ -131,15 +131,6 @@ type FollowingList {
   user2: User!
 }
 
-type ChatRoom {
-  roomName: String!
-  roomId: String!
-  userId: String!
-  userName: String!
-  isHost: Boolean!
-  createdAt: DateTime!
-}
-
 type ReviewNestedComment {
   id: String!
   reviewNestedComment: String!
@@ -150,7 +141,7 @@ type ReviewNestedComment {
 }
 
 type Query {
-  fetchAttendList: [AttendList!]!
+  fetchAttendList(page: Int): [AttendList!]!
   fetchBoard(boardId: String!): Board!
   fetchMyBoard(boardId: String!): Board!
   fetchMyAllBoards(page: Int): [Board!]!
@@ -158,11 +149,9 @@ type Query {
   fetchAllBoardsWithPickCount(page: Int): [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
   serchBoards(word: String!): [Board!]!
-  fetchMyRoomInfo: [ChatRoom!]!
-  fetchRooms: [ChatRoom!]!
   fetchComments(boardId: String!, page: Int): [Comment!]!
-  fetchFollower(userId: String!): [FollowerList!]!
-  fetchFollowing(userId: String!): [FollowingList!]!
+  fetchFollower(userId: String!, page: Int): [FollowerList!]!
+  fetchFollowing(userId: String!, page: Int): [FollowingList!]!
   fetchFollowCount(userId: String!): FollowCount!
   fetchMyFollowCount: FollowCount!
   fetchNestedComments(commentId: String!, page: Int): [NestedComment!]!
@@ -173,7 +162,7 @@ type Query {
   fetchReviewBoardImage(reviewBoardId: String!): [ReviewImage!]!
   fetchAllReviewBoardImages: [ReviewImage!]!
   fetchMyPickBoards(page: Int): [Pick!]!
-  fetchUsers: [User!]!
+  fetchUsers(page: Int): [User!]!
   fetchUser(userId: String!): User!
   fetchUserLoggedIn: User!
 }
@@ -186,8 +175,6 @@ type Mutation {
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(boardId: String!, updateBoardInput: UpdateBoardInput!): Board!
   deleteBoard(boardId: String!): Boolean!
-  makeRoom: [ChatRoom!]!
-  createRoom(roomName: String!): ChatRoom!
   createComment(boardId: String!, comment: String!): Comment!
   deleteComment(commentId: String!): Boolean!
   updateComment(commentId: String!, updateComment: String!): Comment!
@@ -207,7 +194,7 @@ type Mutation {
   deleteReviewComment(reviewCommentId: String!): Boolean!
   updateReviewComment(reviewCommentId: String!, updateReviewComment: String!): ReviewComment!
   createReviewNestedComment(reviewCommentId: String!, reviewNestedComment: String!): ReviewNestedComment!
-  deleteReviewNestedComment(reviewNestedComment: String!): Boolean!
+  deleteReviewNestedComment(reviewNestedCommentId: String!): Boolean!
   updateReviewNestedComment(reviewNestedCommentId: String!, updateReviewNestedComment: String!): ReviewNestedComment!
   deleteReviewBoardImage(reviewImageId: String!, reviewBoardId: String!): Boolean!
   pickBoard(boardId: String!): String!

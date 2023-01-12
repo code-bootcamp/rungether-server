@@ -7,7 +7,7 @@ import {
   UnprocessableEntityException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import * as bcrypt from "bcrypt";
 import { Cache } from "cache-manager";
@@ -46,13 +46,32 @@ export class UsersService {
   }
 
   async findMe({ userId }) {
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
     return user;
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+  async findAll({ page }): Promise<User[]> {
+    return await this.usersRepository
+      .createQueryBuilder("user")
+      .where("user.password is not null")
+      .orderBy("user.createdAt", "DESC")
+      .skip((page - 1) * 8)
+      .take(8)
+      .getMany();
   }
+
+  // async findAllWithFollowCount({ page }) {
+  //   const aaa = await this.usersRepository
+  //     .createQueryBuilder("user")
+  //     .leftJoinAndSelect("followCount.user", "user")
+  //     .where("followCount.user = :id")
+  //     .getMany();
+
+  //   console.log(aaa);
+  //   return aaa;
+  // }
 
   async createUser({ createUserInput }) {
     const { email, password, cpassword, nickname, image, ...user } =

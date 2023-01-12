@@ -41,8 +41,8 @@ export class ReviewBoardsService {
     return this.reviewBoardsRepository.find({
       relations: ["user", "attendList", "reviewImage"],
       order: { createdAt: "DESC" },
-      take: 9,
-      skip: page ? (page - 1) * 9 : 0,
+      take: 12,
+      skip: page ? (page - 1) * 12 : 0,
     });
   }
 
