@@ -55,7 +55,7 @@ export class BoardsService {
   findAllMyUserId({ userId, page }) {
     return this.boardsRepository.find({
       where: { user: { id: userId } },
-      relations: ["user", "image", "location"],
+      relations: ["user", "image", "location", "attendList", "attendList.user"],
       order: { createdAt: "DESC" },
       take: 5,
       skip: page ? (page - 1) * 5 : 0,
