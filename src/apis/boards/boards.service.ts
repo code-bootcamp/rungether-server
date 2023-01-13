@@ -52,25 +52,6 @@ export class BoardsService {
     return result;
   }
 
-  // //보드수정
-  // async findMyUserIdWithAttendListId({ userId, boardId, attendListId }) {
-  //   const result = await this.boardsRepository.findOne({
-  //     where: {
-  //       id: boardId,
-  //       user: { id: userId },
-  //     },
-  //     relations: ["user"],
-  //   });
-  //   const result2 = await this.attendListRepository.findOne({
-  //     where: {
-  //       board: { id: result.id },
-  //     },
-  //     relations: ["board"],
-  //   });
-  //   return result2;
-  // }
-  // //보드수정
-
   findAllMyUserId({ userId, page }) {
     return this.boardsRepository.find({
       where: { user: { id: userId } },
@@ -106,7 +87,7 @@ export class BoardsService {
     });
   }
 
-  async serchAllBoards({ word }) {
+  async searchAllBoards({ word }) {
     return await this.boardsRepository.findBy({
       title: Like(`%${word}%`),
     });

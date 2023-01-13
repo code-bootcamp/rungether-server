@@ -119,6 +119,7 @@ export class ReviewBoardsService {
     const result = await this.reviewBoardsRepository.save({
       ...findReviewBoard,
       ...reviewBoard,
+      thumbnail: reviewImage[0],
     });
 
     if (reviewImage) {
