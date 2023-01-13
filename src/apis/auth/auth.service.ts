@@ -41,14 +41,14 @@ export class AuthService {
       "Access-Control-Allow-Headers, Origin, Accept, X-Requested-with, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
     );
 
+    // res.setHeader(
+    // "Set-Cookie",
+    // `refreshToken=${refreshToken}; path=/; domain=.meonjifather.shop; SameSite=None; Secure; httpOnly`
+    // );
     res.setHeader(
       "Set-Cookie",
-      `refreshToken=${refreshToken}; path=/; domain=.meonjifather.shop; SameSite=None; Secure; httpOnly`
+      `refreshToken=${refreshToken}; path=/; domain=.backsol2.shop; SameSite=None; Secure; httpOnly`
     );
-    // res.setHeader(
-    //   "Set-Cookie",
-    //   `refreshToken=${refreshToken}; path=/; domain=.backsol2.shop; SameSite=None; Secure; httpOnly`
-    // );
     // res.setHeader(
     //   "Set-Cookie",
     //   `refreshToken=${refreshToken}; path=/; Secure; httpOnly;`
