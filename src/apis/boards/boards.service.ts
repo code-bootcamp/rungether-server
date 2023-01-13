@@ -193,12 +193,24 @@ export class BoardsService {
   async delete({ boardId, userId }) {
     const Board = await this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ["user"],
+      relations: ["user", "image", "location"],
     });
+
+    console.log("보드의 정보입니다", Board);
 
     if (userId !== Board.user.id) {
       throw new UnprocessableEntityException("삭제 권한이 없습니다!");
     }
+
+    await this.boardsRepository.save({
+      id: boardId,
+      image: null,
+      location: null,
+    });
+
+    await this.imagesRepository.delete({ id: Board.image.id });
+
+    await this.locationsRepository.delete({ id: Board.location.id });
 
     const result = await this.boardsRepository.delete({
       id: boardId,

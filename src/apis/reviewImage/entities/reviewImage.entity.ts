@@ -27,7 +27,7 @@ export class ReviewImage {
   @Field(() => Date)
   deletedAt: Date;
 
-  @ManyToOne(() => ReviewBoard)
+  @ManyToOne(() => ReviewBoard, { onDelete: "CASCADE" })
   @Field(() => ReviewBoard)
   reviewBoard: ReviewBoard;
 }

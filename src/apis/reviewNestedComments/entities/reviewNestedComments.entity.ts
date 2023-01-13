@@ -33,7 +33,7 @@ export class ReviewNestedComment {
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => ReviewComment)
+  @ManyToOne(() => ReviewComment, { onDelete: "CASCADE" })
   @Field(() => ReviewComment)
   reviewComment: ReviewComment;
 }

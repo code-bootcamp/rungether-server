@@ -23,7 +23,7 @@ export class FollowResolver {
   @Query(() => [FollowerList])
   fetchFollower(
     @Args("userId") userId: string, //
-    @Args("page", { nullable: true, type: () => Int }) page: number
+    @Args({ name: "page", type: () => Int, defaultValue: 1 }) page: number
   ) {
     return this.followService.findUserFollower({ userId, page });
   }
@@ -31,7 +31,7 @@ export class FollowResolver {
   @Query(() => [FollowingList])
   fetchFollowing(
     @Args("userId") userId: string, //
-    @Args("page", { nullable: true, type: () => Int }) page: number
+    @Args({ name: "page", type: () => Int, defaultValue: 1 }) page: number
   ) {
     return this.followService.findUserFollowing({ userId, page });
   }
