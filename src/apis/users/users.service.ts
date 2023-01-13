@@ -62,17 +62,6 @@ export class UsersService {
       .getMany();
   }
 
-  // async findAllWithFollowCount({ page }) {
-  //   const aaa = await this.usersRepository
-  //     .createQueryBuilder("user")
-  //     .leftJoinAndSelect("followCount.user", "user")
-  //     .where("followCount.user = :id")
-  //     .getMany();
-
-  //   console.log(aaa);
-  //   return aaa;
-  // }
-
   async createUser({ createUserInput }) {
     const { email, password, cpassword, nickname, image, ...user } =
       createUserInput;

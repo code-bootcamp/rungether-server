@@ -10,6 +10,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -27,13 +28,16 @@ export class AttendList {
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => Board)
+  @ManyToOne(() => Board, { onDelete: "CASCADE" })
   @Field(() => Board)
   board: Board;
 
   @JoinColumn()
-  @OneToOne(() => ReviewBoard)
-  reviewBoard: ReviewBoard;
+  @OneToMany(() => ReviewBoard, (reviewBoard) => reviewBoard.attendList, {
+    cascade: true,
+  })
+  @Field(() => [ReviewBoard])
+  reviewBoard: ReviewBoard[];
 
   // @Column()
   // @Field(() => String)

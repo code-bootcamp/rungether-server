@@ -34,7 +34,7 @@ export class UsersResolver {
 
   @Query(() => [User])
   fetchUsers(
-    @Args("page", { nullable: true, type: () => Int }) page: number
+    @Args({ name: "page", type: () => Int, defaultValue: 1 }) page: number
   ): Promise<User[]> {
     return this.usersService.findAll({ page });
   }
@@ -52,13 +52,6 @@ export class UsersResolver {
     const userId = context.req.user.id;
     return this.usersService.findMe({ userId });
   }
-
-  // @Query(() => [User])
-  // fetchUsersWithFollowCount(
-  //   @Args("page", { nullable: true, type: () => Int }) page: number
-  // ) {
-  //   return this.boardsService.findAllWithFollowCount(page);
-  // }
 
   @Mutation(() => User)
   createUser(

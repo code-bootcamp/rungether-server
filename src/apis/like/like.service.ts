@@ -39,7 +39,7 @@ export class LikeService {
 
       await this.reviewBoardRepository.update(
         { id: reviewBoardId },
-        { like: reviewBoard.like - 1 }
+        { likeCount: reviewBoard.likeCount - 1 }
       );
       return "좋아요 취소";
     } else {
@@ -53,7 +53,7 @@ export class LikeService {
       });
       await this.reviewBoardRepository.update(
         { id: reviewBoardId },
-        { like: reviewBoard.like + 1 }
+        { likeCount: reviewBoard.likeCount + 1 }
       );
       return "좋아요 추가";
     }

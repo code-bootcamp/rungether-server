@@ -15,6 +15,6 @@ export class Like {
   user: User;
 
   @Field(() => ReviewBoard)
-  @ManyToOne(() => ReviewBoard)
+  @ManyToOne(() => ReviewBoard, { onDelete: "CASCADE" })
   reviewBoard: ReviewBoard;
 }

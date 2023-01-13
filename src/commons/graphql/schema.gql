@@ -2,19 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ReviewImage {
-  id: String!
-  imgUrl: String!
-  isMain: Boolean!
-  deletedAt: DateTime!
-  reviewBoard: ReviewBoard!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type User {
   id: String!
   email: String!
@@ -27,12 +14,50 @@ type User {
   image: Image
 }
 
+type Like {
+  id: String!
+  user: User!
+  reviewBoard: ReviewBoard!
+}
+
+type ReviewNestedComment {
+  id: String!
+  reviewNestedComment: String!
+  createAt: DateTime!
+  deletedAt: DateTime!
+  user: User!
+  reviewComment: ReviewComment!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ReviewComment {
+  id: String!
+  reviewComment: String!
+  createdAt: DateTime!
+  deletedAt: DateTime!
+  user: User!
+  reviewBoard: ReviewBoard!
+}
+
+type ReviewImage {
+  id: String!
+  imgUrl: String!
+  isMain: Boolean!
+  deletedAt: DateTime!
+  reviewBoard: ReviewBoard!
+}
+
 type ReviewBoard {
   id: String!
   title: String!
   content: String!
-  like: Int!
+  likeCount: Int!
   user: User!
+  like: [Like!]!
   thumbnail: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -43,6 +68,7 @@ type AttendList {
   id: String!
   user: User!
   board: Board!
+  reviewBoard: [ReviewBoard!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -51,6 +77,12 @@ type Location {
   id: String!
   center: String!
   path: String!
+}
+
+type Pick {
+  id: String!
+  board: Board!
+  user: User!
 }
 
 type Board {
@@ -69,8 +101,9 @@ type Board {
   deletedAt: DateTime!
   user: User!
   image: Image
-  location: Location!
+  location: Location
   attendList: [AttendList!]!
+  pick: [Pick!]!
 }
 
 type Image {
@@ -96,12 +129,6 @@ type Comment {
   board: Board!
 }
 
-type Pick {
-  id: String!
-  board: Board!
-  user: User!
-}
-
 type NestedComment {
   id: String!
   nestedComment: String!
@@ -110,15 +137,6 @@ type NestedComment {
   deletedAt: DateTime!
   comment: Comment!
   user: User!
-}
-
-type ReviewComment {
-  id: String!
-  reviewComment: String!
-  createdAt: DateTime!
-  deletedAt: DateTime!
-  user: User!
-  reviewBoard: ReviewBoard!
 }
 
 type FollowerList {
@@ -131,13 +149,12 @@ type FollowingList {
   user2: User!
 }
 
-type ReviewNestedComment {
+type ChatHistory {
   id: String!
-  reviewNestedComment: String!
-  createAt: DateTime!
-  deletedAt: DateTime!
-  user: User!
-  reviewComment: ReviewComment!
+  user: String!
+  message: String!
+  createdAt: DateTime!
+  board: Board!
 }
 
 type Query {
@@ -149,9 +166,10 @@ type Query {
   fetchAllBoardsWithPickCount(page: Int): [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
   serchBoards(word: String!): [Board!]!
+  fetchChatHistory(boardId: String!): [ChatHistory!]!
   fetchComments(boardId: String!, page: Int): [Comment!]!
-  fetchFollower(userId: String!, page: Int): [FollowerList!]!
-  fetchFollowing(userId: String!, page: Int): [FollowingList!]!
+  fetchFollower(userId: String!, page: Int! = 1): [FollowerList!]!
+  fetchFollowing(userId: String!, page: Int! = 1): [FollowingList!]!
   fetchFollowCount(userId: String!): FollowCount!
   fetchMyFollowCount: FollowCount!
   fetchNestedComments(commentId: String!, page: Int): [NestedComment!]!
@@ -162,7 +180,7 @@ type Query {
   fetchReviewBoardImage(reviewBoardId: String!): [ReviewImage!]!
   fetchAllReviewBoardImages: [ReviewImage!]!
   fetchMyPickBoards(page: Int): [Pick!]!
-  fetchUsers(page: Int): [User!]!
+  fetchUsers(page: Int! = 1): [User!]!
   fetchUser(userId: String!): User!
   fetchUserLoggedIn: User!
 }

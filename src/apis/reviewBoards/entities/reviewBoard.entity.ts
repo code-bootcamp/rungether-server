@@ -1,5 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { AttendList } from "src/apis/attendList/entities/attendList.entity";
+import { Like } from "src/apis/like/entities/like.entity";
+import { ReviewComment } from "src/apis/reviewComments/entities/reviewComment.entity";
 import { ReviewImage } from "src/apis/reviewImage/entities/reviewImage.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
@@ -33,20 +35,36 @@ export class ReviewBoard {
 
   @Column({ default: 0 })
   @Field(() => Int)
-  like: number;
+  likeCount: number;
 
   @JoinTable()
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
 
-  @JoinColumn()
-  @OneToOne(() => AttendList)
+  @JoinTable()
+  @ManyToOne(() => AttendList, { onDelete: "CASCADE" })
   attendList: AttendList;
 
   @JoinColumn()
-  @OneToMany(() => ReviewImage, (reviewImage) => reviewImage.reviewBoard)
+  @OneToMany(() => ReviewImage, (reviewImage) => reviewImage.reviewBoard, {
+    cascade: true,
+  })
   reviewImage: ReviewImage[];
+
+  @JoinColumn()
+  @OneToMany(
+    () => ReviewComment,
+    (reviewComment) => reviewComment.reviewBoard,
+    {
+      cascade: true,
+    }
+  )
+  reviewComment: ReviewComment;
+
+  @OneToMany(() => Like, (like) => like.reviewBoard, { cascade: true })
+  @Field(() => [Like])
+  like: Like[];
 
   @Column()
   @Field(() => String)

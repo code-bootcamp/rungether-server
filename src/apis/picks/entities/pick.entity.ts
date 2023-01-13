@@ -16,7 +16,7 @@ export class Pick {
   @Field(() => String)
   id: string;
 
-  @ManyToOne(() => Board)
+  @ManyToOne(() => Board, { onDelete: "CASCADE" })
   @Field(() => Board)
   board: Board;
 

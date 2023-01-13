@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { AttendList } from "src/apis/attendList/entities/attendList.entity";
 import { Image } from "src/apis/Image/entities/image.entity";
 import { Location } from "src/apis/location/entities/location.entity";
+import { Pick } from "src/apis/picks/entities/pick.entity";
 import { User } from "src/apis/users/entities/user.entity";
 import {
   Column,
@@ -83,11 +84,17 @@ export class Board {
   image: Image;
 
   @JoinColumn()
-  @Field(() => Location)
-  @OneToOne(() => Location)
+  @Field(() => Location, { nullable: true })
+  @OneToOne(() => Location, { nullable: true })
   location: Location;
 
-  @OneToMany(() => AttendList, (attendList) => attendList.board)
+  @OneToMany(() => AttendList, (attendList) => attendList.board, {
+    cascade: true,
+  })
   @Field(() => [AttendList])
   attendList: AttendList[];
+
+  @OneToMany(() => Pick, (pick) => pick.board, { cascade: true })
+  @Field(() => [Pick])
+  pick: Pick[];
 }
