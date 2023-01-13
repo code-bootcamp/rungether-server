@@ -34,23 +34,6 @@ export class BoardsResolver {
     return this.boardsService.findMyUserId({ userId, boardId });
   }
 
-  // //보드수정
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Query(() => AttendList)
-  // fetchMyBoardWithAttendList(
-  //   @Context() context: IContext, //
-  //   @Args("boardId") boardId: string,
-  //   @Args("attendListId") attendListId: string
-  // ) {
-  //   const userId = context.req.user.id;
-  //   return this.boardsService.findMyUserIdWithAttendListId({
-  //     userId,
-  //     boardId,
-  //     attendListId,
-  //   });
-  // }
-  // //보드수정
-
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Board])
   fetchMyAllBoards(
@@ -81,10 +64,10 @@ export class BoardsResolver {
   }
 
   @Query(() => [Board])
-  serchBoards(
+  searchBoards(
     @Args("word") word: string //
   ) {
-    return this.boardsService.serchAllBoards({ word });
+    return this.boardsService.searchAllBoards({ word });
   }
 
   @UseGuards(GqlAuthAccessGuard)

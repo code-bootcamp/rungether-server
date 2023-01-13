@@ -55,6 +55,7 @@ export class UsersService {
   async findAll({ page }): Promise<User[]> {
     return await this.usersRepository
       .createQueryBuilder("user")
+      .leftJoinAndSelect("user.image", "image")
       .where("user.password is not null")
       .orderBy("user.createdAt", "DESC")
       .skip((page - 1) * 8)
