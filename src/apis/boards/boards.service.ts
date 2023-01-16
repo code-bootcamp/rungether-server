@@ -36,6 +36,7 @@ export class BoardsService {
         "location",
         "attendList",
         "attendList.user",
+        'attendList.user.image',
         "user.image",
       ],
     });
