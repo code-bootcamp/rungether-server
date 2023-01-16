@@ -27,11 +27,20 @@ export class BoardsService {
     private readonly locationsRepository: Repository<Location> // @InjectRepository(AttendList) // private readonly attendListRepository: Repository<AttendList>
   ) {}
 
-  findOneById({ boardId }) {
-    return this.boardsRepository.findOne({
+  async findOneById({ boardId }) {
+    const boardUser = await this.boardsRepository.findOne({
       where: { id: boardId },
-      relations: ["user", "image", "location", "attendList", "attendList.user"],
+      relations: [
+        "user",
+        "image",
+        "location",
+        "attendList",
+        "attendList.user",
+        "user.image",
+      ],
     });
+
+    return boardUser;
   }
 
   findAllByUserId({ userId }) {
@@ -64,7 +73,7 @@ export class BoardsService {
 
   findAll(page) {
     return this.boardsRepository.find({
-      relations: ["user", "image", "location"],
+      relations: ["user", "image", "location", "user.image"],
       order: { createdAt: "DESC" },
       take: 8,
       skip: page ? (page - 1) * 8 : 0,
