@@ -21,7 +21,7 @@ export class ReviewNestedCommentsService {
   async findAll({ reviewCommentId, page }) {
     return await this.reviewNestedCommentRepository.find({
       where: { reviewComment: { id: reviewCommentId } },
-      relations: ["reviewComment", "user"],
+      relations: ["reviewComment", "user", "user.image"],
       order: { createAt: "ASC" },
       take: 4,
       skip: page ? (page - 1) * 4 : 0,

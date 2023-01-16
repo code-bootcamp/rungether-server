@@ -21,7 +21,7 @@ export class PicksService {
   async find({ userId, page }) {
     const result = await this.picksRepository.find({
       where: { user: { id: userId } },
-      relations: ["user", "board"],
+      relations: ["user", "board", "user.image"],
       order: { createdAt: "DESC" },
       take: 5,
       skip: page ? (page - 1) * 5 : 0,
