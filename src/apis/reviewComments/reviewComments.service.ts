@@ -21,7 +21,7 @@ export class ReviewCommentsService {
   async findAll({ reviewBoardId, page }) {
     return await this.reviewCommentRepository.find({
       where: { reviewBoard: { id: reviewBoardId } },
-      relations: ["reviewBoard", "user"],
+      relations: ["reviewBoard", "user", "user.image"],
       order: { createdAt: "ASC" },
       take: 4,
       skip: page ? (page - 1) * 4 : 0,

@@ -86,7 +86,7 @@ export class AttendListService {
   async findAll({ userId, page }) {
     const result = await this.attendListRepository.find({
       where: { user: { id: userId } },
-      relations: ["user", "board"],
+      relations: ["user", "board", "user.image"],
       order: { createdAt: "DESC" },
       take: 5,
       skip: page ? (page - 1) * 5 : 0,
