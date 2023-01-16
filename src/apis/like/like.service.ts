@@ -19,7 +19,7 @@ export class LikeService {
 
   async like({ user, reviewBoardId }) {
     const findUser = await this.userRepository.findOne({
-      where: { email: user },
+      where: { id: user },
     });
 
     const findLike = await this.likeRepository.findOne({

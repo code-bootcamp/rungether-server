@@ -48,6 +48,7 @@ export class UsersService {
   async findMe({ userId }) {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
+      relations: ["image"],
     });
     return user;
   }
