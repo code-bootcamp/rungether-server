@@ -126,15 +126,18 @@ export class UsersService {
     let userImage = {};
 
     if (image) {
-      await this.imagesRepository.softDelete({ id: findUser.image.id });
       userImage = await this.imagesRepository.save({ imgUrl: image });
     }
 
-    return await this.usersRepository.save({
+    const result = await this.usersRepository.save({
       ...findUser,
       ...user,
       image: { ...userImage },
     });
+
+    await this.imagesRepository.delete({ id: findUser.image.id });
+
+    return result;
   }
 
   async delete({ userId }) {
