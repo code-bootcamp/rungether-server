@@ -40,7 +40,7 @@ export class AuthResolver {
     console.log("===================");
     console.log(user);
     console.log("===================");
-    //오류 반환
+    //오류 반환,
     //이메일 오류
     if (!user) throw new UnprocessableEntityException("이메일을 확인해주세요.");
     //비밀번호 오류
