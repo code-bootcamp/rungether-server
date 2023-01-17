@@ -4,6 +4,7 @@ import {
   UnprocessableEntityException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { title } from "process";
 import { Like, Repository } from "typeorm";
 import { AttendList } from "../attendList/entities/attendList.entity";
 import { Image } from "../Image/entities/image.entity";
@@ -36,7 +37,7 @@ export class BoardsService {
         "location",
         "attendList",
         "attendList.user",
-        'attendList.user.image',
+        "attendList.user.image",
         "user.image",
       ],
     });
@@ -97,10 +98,16 @@ export class BoardsService {
     });
   }
 
-  async searchAllBoards({ word }) {
-    return await this.boardsRepository.findBy({
-      title: Like(`%${word}%`),
+  async searchAllBoards({ word, page }) {
+    const findBoard = await this.boardsRepository.find({
+      where: { title: Like(`%${word}%`) },
+      relations: ["user", "user.image", "image"],
+      order: { createdAt: "DESC" },
+      take: 8,
+      skip: page ? (page - 1) * 8 : 0,
     });
+
+    return findBoard;
   }
 
   async create({ userId, createBoardInput }) {
