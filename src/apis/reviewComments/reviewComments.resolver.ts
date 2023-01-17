@@ -13,10 +13,9 @@ export class ReviewCommentsResolver {
 
   @Query(() => [ReviewComment])
   fetchReviewComments(
-    @Args("reviewBoardId") reviewBoardId: string, //
-    @Args("page", { nullable: true, type: () => Int }) page: number
+    @Args("reviewBoardId") reviewBoardId: string //
   ) {
-    return this.reviewCommentsService.findAll({ reviewBoardId, page });
+    return this.reviewCommentsService.findAll({ reviewBoardId });
   }
 
   @UseGuards(GqlAuthAccessGuard)

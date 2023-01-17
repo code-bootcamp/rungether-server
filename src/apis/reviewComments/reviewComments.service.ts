@@ -18,13 +18,11 @@ export class ReviewCommentsService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  async findAll({ reviewBoardId, page }) {
+  async findAll({ reviewBoardId }) {
     return await this.reviewCommentRepository.find({
       where: { reviewBoard: { id: reviewBoardId } },
       relations: ["reviewBoard", "user", "user.image"],
       order: { createdAt: "ASC" },
-      take: 4,
-      skip: page ? (page - 1) * 4 : 0,
     });
   }
 

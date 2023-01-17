@@ -12,11 +12,8 @@ export class ReviewNestedCommentsResolver {
   ) {}
 
   @Query(() => [ReviewNestedComment])
-  fetchReviewNestedComments(
-    @Args("reviewCommentId") reviewCommentId: string,
-    @Args("page", { nullable: true, type: () => Int }) page: number
-  ) {
-    return this.reviewNestedCommentsService.findAll({ reviewCommentId, page });
+  fetchReviewNestedComments(@Args("reviewCommentId") reviewCommentId: string) {
+    return this.reviewNestedCommentsService.findAll({ reviewCommentId });
   }
 
   @UseGuards(GqlAuthAccessGuard)
