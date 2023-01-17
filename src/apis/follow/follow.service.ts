@@ -77,6 +77,8 @@ export class FollowService {
       .createQueryBuilder("follow")
       .leftJoinAndSelect("follow.user2", "user")
       .where("follow.user2 = :id", { id: userId })
+      .leftJoinAndSelect('user.image', 'image')
+      .where('user.image')
       .skip((page - 1) * 8)
       .take(8)
       .getMany();
@@ -88,6 +90,8 @@ export class FollowService {
       .createQueryBuilder("follow")
       .leftJoinAndSelect("follow.user2", "user")
       .where("follow.user1 = :id", { id: userId })
+      .leftJoinAndSelect('user.image', 'image')
+      .where('user.image')
       .skip((page - 1) * 8)
       .take(8)
       .getMany();
