@@ -73,28 +73,40 @@ export class FollowService {
   }
 
   async findUserFollower({ userId, page }) {
-    const findFollower = await this.followRepository
-      .createQueryBuilder("follow")
-      .leftJoinAndSelect("follow.user2", "user")
-      .where("follow.user2 = :id", { id: userId })
-      .leftJoinAndSelect('user.image', 'image')
-      .where('user.image')
-      .skip((page - 1) * 8)
-      .take(8)
-      .getMany();
+    // const findFollower = await this.followRepository
+    //   .createQueryBuilder("follow")
+    //   .leftJoinAndSelect("follow.user2", "user")
+    //   .where("follow.user2 = :id", { id: userId })
+    //   .leftJoinAndSelect('user.image', 'image')
+    //   .where('user.image')
+    //   .skip((page - 1) * 8)
+    //   .take(8)
+    //   .getMany();
+    const findFollower = await this.followRepository.find({
+      where: { user2: { id: userId } },
+      relations: ["user1", "user1.image"],
+      take: 8,
+      skip: page ? (page - 1) * 8 : 0,
+    });
     return findFollower;
   }
 
   async findUserFollowing({ userId, page }) {
-    const findUserFollowing = await this.followRepository
-      .createQueryBuilder("follow")
-      .leftJoinAndSelect("follow.user2", "user")
-      .where("follow.user1 = :id", { id: userId })
-      .leftJoinAndSelect('user.image', 'image')
-      .where('user.image')
-      .skip((page - 1) * 8)
-      .take(8)
-      .getMany();
+    // const findUserFollowing = await this.followRepository
+    //   .createQueryBuilder("follow")
+    //   .leftJoinAndSelect("follow.user2", "user")
+    //   .where("follow.user1 = :id", { id: userId })
+    //   .leftJoinAndSelect('user.image', 'image')
+    //   .where('user.image')
+    //   .skip((page - 1) * 8)
+    //   .take(8)
+    //   .getMany();
+    const findUserFollowing = await this.followRepository.find({
+      where: { user1: { id: userId } },
+      relations: ["user2", "user2.image"],
+      take: 8,
+      skip: page ? (page - 1) * 8 : 0,
+    });
 
     return findUserFollowing;
   }
