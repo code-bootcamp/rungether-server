@@ -7,5 +7,5 @@ export class FollowerList {
   id: string;
 
   @Field(() => User)
-  user2: User;
+  user1: User;
 }
