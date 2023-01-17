@@ -65,9 +65,10 @@ export class BoardsResolver {
 
   @Query(() => [Board])
   searchBoards(
-    @Args("word") word: string //
+    @Args("word") word: string, //
+    @Args({ name: "page", type: () => Int, defaultValue: 1 }) page: number
   ) {
-    return this.boardsService.searchAllBoards({ word });
+    return this.boardsService.searchAllBoards({ word, page });
   }
 
   @UseGuards(GqlAuthAccessGuard)

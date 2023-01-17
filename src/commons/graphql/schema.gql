@@ -165,7 +165,7 @@ type Query {
   fetchAllBoards(page: Int): [Board!]!
   fetchAllBoardsWithPickCount(page: Int): [Board!]!
   fetchAllBoardsWithDelete: [Board!]!
-  searchBoards(word: String!): [Board!]!
+  searchBoards(word: String!, page: Int! = 1): [Board!]!
   fetchChatHistory(boardId: String!): [ChatHistory!]!
   fetchComments(boardId: String!, page: Int): [Comment!]!
   fetchFollower(userId: String!, page: Int! = 1): [FollowerList!]!
