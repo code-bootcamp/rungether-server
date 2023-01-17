@@ -29,11 +29,11 @@
 # 🕶️ 팀원소개
 
 <p align="center">
-<img width=60% src=https://user-images.githubusercontent.com/114567220/212851671-8a17421d-abff-4384-9fd4-f578e3ca1884.png>
+<img width=80% src=https://user-images.githubusercontent.com/114567220/212851671-8a17421d-abff-4384-9fd4-f578e3ca1884.png>
 </p>
 
 <p align="center">
-<img width=60% src=https://user-images.githubusercontent.com/114567220/212852263-bf231d11-f08b-4ba0-bba7-22d1a3228906.png>
+<img width=80% src=https://user-images.githubusercontent.com/114567220/212852263-bf231d11-f08b-4ba0-bba7-22d1a3228906.png>
 </p>
 
 <br><br>
@@ -41,7 +41,7 @@
 # ⚡️ 기술스택
 
 <p align="center">
-<img width=60% src=https://user-images.githubusercontent.com/114567220/212852404-111ba590-e0fa-4f66-b9cb-73ef26540c5d.png>
+<img width=80% src=https://user-images.githubusercontent.com/114567220/212852404-111ba590-e0fa-4f66-b9cb-73ef26540c5d.png>
 </p>
 
 <br><br>
@@ -49,7 +49,7 @@
 # 💫 Data Flow
 
 <p align="center">
-<img width=60% src=https://user-images.githubusercontent.com/114567220/212852521-e27291ae-ce95-4640-b35c-715cd4f1ea5a.png>
+<img width=80% src=https://user-images.githubusercontent.com/114567220/212852521-e27291ae-ce95-4640-b35c-715cd4f1ea5a.png>
 </p>
 
 <br><br>
@@ -57,7 +57,7 @@
 # ⭐️ ERD
 
 <p align="center">
-<img width=60% src=https://user-images.githubusercontent.com/114567220/212852593-9794be08-acf2-4eba-93b4-d9b2bf860732.png>
+<img width=80% src=https://user-images.githubusercontent.com/114567220/212852593-9794be08-acf2-4eba-93b4-d9b2bf860732.png>
 </p>
 
 <br><br>
